@@ -1,0 +1,77 @@
+/*!
+ * VisualEditor UserInterface LanguageToolDialog styles.
+ *
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ */
+
+.ve-ui-LanguageToolDialog-row {
+	display: table;
+	min-width: 30em;
+	padding-bottom: 0.3em;
+}
+
+.ve-ui-LanguageToolDialog-row:last-child {
+	/* Extra pixel for button shadows */
+	padding-bottom: 1px;
+}
+
+.ve-ui-LanguageToolDialog-cell {
+	display: table-cell;
+	vertical-align: middle;
+	white-space: nowrap;
+	padding-right: 1em;
+}
+
+.ve-ui-LanguageToolDialog-cell:last-child {
+	padding-right: 0;
+}
+
+.ve-ui-LanguageToolDialog-cell-input {
+	width: 100%;
+}
+
+.ve-ui-LanguageToolDialog-cell-input .oo-ui-textInputWidget {
+	max-width: none;
+}
+
+.ve-ui-LanguageToolDialog-findText-error input {
+	background-color: #edd;
+}
+
+/* @noflip */
+.ve-ui-LanguageToolDialog-findResults {
+	position: absolute;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+}
+
+.ve-ui-LanguageToolDialog-findResult {
+	opacity: 0.2;
+}
+
+.ve-ui-LanguageToolDialog-findResult > div {
+	background: #28bb0b;
+	position: absolute;
+	margin-top: -0.15em;
+	padding: 0.15em 0;
+	border-radius: 0.15em;
+}
+
+.ve-ui-LanguageToolDialog-findResult-focused {
+	opacity: 0.4;
+}
+
+.ve-ui-LanguageToolDialog-findResult-focused > div {
+	background: #1f850b;
+}
+
+/* Set opacity directly on the highlights, rather than their containers,
+   otherwise the opacity isn't applied at all */
+.ve-init-target-ie .ve-ui-LanguageToolDialog-findResult > div {
+	opacity: 0.2;
+}
+
+.ve-init-target-ie .ve-ui-LanguageToolDialog-findResult-focused > div {
+	opacity: 0.4;
+}

@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ankita Kumari",
+			"Eran Rosenthal",
+			"Amir E. Aharoni"
+		]
+	},
+	"languagetool-desc": "{{desc|name=LanguageTool|url=https://www.mediawiki.org/wiki/Extension:LanguageTool}}"
+}
