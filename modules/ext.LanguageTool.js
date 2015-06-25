@@ -9,14 +9,9 @@
 		};
 	OO.inheritClass( mw.languageTool, ve.ui.DialogTool );
 	mw.languageTool.static.name = 'LanguageTool';
-	mw.languageTool.static.group = 'dialog';
+	mw.languageTool.static.group = 'object';
 	mw.languageTool.static.icon = 'picture';
 	mw.languageTool.static.title = 'LanguageTool';
-	mw.languageTool.static.commandName = 'languageTool';
-	mw.languageTool.static.activeWindow = 'languageTool';
-	//mw.languageTool.static.modelClasses = [ ve.dm.MWBlockImageNode, ve.dm.MWInlineImageNode ];
-	//mw.languageTool.static.commandName = 'media';
-	//mw.languageTool.static.autoAddToCatchall = false;
-	//mw.languageTool.static.autoAddToGroup = false;
+	mw.languageTool.static.commandName = 'send';
 	ve.ui.toolFactory.register( mw.languageTool );
 }() );

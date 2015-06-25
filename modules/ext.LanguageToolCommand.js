@@ -19,12 +19,6 @@
 mw.languageToolCommand = function VeUiHistoryCommand( name, method ) {
 	// Parent constructor
 	mw.languageToolCommand.super.call( this, name, 'languageTool', method );
-	/*
-	this.check = {
-		undo: 'canUndo',
-		redo: 'canRedo'
-	}[method];
-	*/
 };
 
 /* Inheritance */
@@ -45,15 +39,5 @@ mw.languageToolCommand.prototype.isExecutable = function ( fragment ) {
 };
 
 /* Registration */
-
-ve.ui.commandRegistry.register( new mw.languageToolCommand( 'extract', 'extract' ) );
-
 ve.ui.commandRegistry.register( new mw.languageToolCommand( 'send', 'send' ) );
-ve.ui.commandRegistry.register(
-	new ve.ui.Command(
-		'languageTool', 'window', 'open', { args: ['languageTool'] }
-	)
-);
-
-
 }() );
