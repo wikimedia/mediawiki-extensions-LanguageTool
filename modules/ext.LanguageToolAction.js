@@ -77,34 +77,47 @@ mw.languageToolAction.prototype.send = function () {
 			var node = textNodes[nodeI];
 			var nodeRange = node.getRange();
 			var nodeText = model.getLinearFragment(nodeRange).getText();
-			text += nodeText;
+			text = text + "\n" + nodeText;
 		}
 		var lang = mw.config.get( 'wgPageContentLanguage' );
 		var params = "language=" + lang + "&text=" + text;
 		$.ajax(
 		{
 			type: 'POST',
-			dataType: 'text',
+			//dataType: 'xml',
 			url: 'http://tools.wmflabs.org/languageproofing/',
 			data: {language: lang,  text: text}
 		}
 		)
-		.done(function(d)
-		{
-			// Example: Creating and opening a message dialog window.
-			var messageDialog = new OO.ui.MessageDialog();
+		.done( this.openDialog );
+		return;
+	}
+mw.languageToolAction.prototype.openDialog = function ( responseXML ) {
+	var messageDialog = new OO.ui.MessageDialog();
 			// Create and append a window manager.
 			var windowManager = new OO.ui.WindowManager();
 			$( 'body' ).append( windowManager.$element );
 			windowManager.addWindows( [ messageDialog ] );
+
+			var errors = responseXML.getElementsByTagName( "error" );
+			console.log(errors);
+			var i;
+			var response = "";
+			for ( i = 0; i < errors.length; i++ ) {
+				response = response + "ERROR " + i + " :\n";
+				response = response + "error : " + errors[i].getAttribute( 'msg' ) + "\n";
+				response = response + "context : " + errors[i].getAttribute( 'context' ) + "\n";
+				messageDialog.setData( 'error', errors[i].getAttribute( 'msg' ) );
+				messageDialog.setData( 'context', errors[i].getAttribute( 'context' ));
+			}
+			console.log(response);
+			// Example: Creating and opening a message dialog window.
 			// Open the window.
 			windowManager.openWindow( messageDialog, {
     			title: 'LanguageTool Response',
-    			message: d
+    			message: response
 			} );
-		});
-		return;
-	}
+}
 
 /* Registration */
 
