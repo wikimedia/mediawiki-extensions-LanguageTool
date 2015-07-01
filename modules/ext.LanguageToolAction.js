@@ -95,13 +95,19 @@ mw.languageToolAction.prototype.send = function () {
 		data: { language: lang,  text: text }
 	} ).done(
 		this.openDialog
+		//this.processXML
 	);
 
 	return;
 };
 
 mw.languageToolAction.prototype.openDialog = function ( responseXML ) {
-	var messageDialog, windowManager, errors, i, response;
+	var suggestions, messageDialog, windowManager, errors, i, response;
+
+	//var processXML = this.processXML.bind( this );
+	suggestions = this.processXML( responseXML );
+	console.log('suggestions');
+	console.log(suggestions);
 
 	messageDialog = new OO.ui.MessageDialog();
 
@@ -131,6 +137,51 @@ mw.languageToolAction.prototype.openDialog = function ( responseXML ) {
 		message: response
 	} );
 };
+
+mw.languageToolAction.prototype.processXML = function ( responseXML ) {
+	console.log('entered');
+	this.suggestions = [];
+	var errors = responseXML.getElementsByTagName('error');
+	for (var i = 0; i < errors.length; i++) {
+		var suggestion = {};
+		// I didn't manage to make the CSS break the text, so we add breaks with Javascript:
+		suggestion["description"] = this._wordwrap(errors[i].getAttribute("msg"), 50, "<br/>");
+		suggestion["suggestions"] = [];
+		var suggestionsStr = errors[i].getAttribute("replacements");
+		if (suggestionsStr) {
+			suggestion["suggestions"] = suggestionsStr;
+		}
+		var errorOffset = parseInt(errors[i].getAttribute("offset"));
+		var errorLength = parseInt(errors[i].getAttribute("errorlength"));
+		suggestion["offset"] = errorOffset;
+		suggestion["errorlength"] = errorLength;
+		suggestion["type"] = errors[i].getAttribute("category");
+		suggestion["ruleid"] = errors[i].getAttribute("ruleId");
+		suggestion["subid"] = errors[i].getAttribute("subId");
+		var url = errors[i].getAttribute("url");
+		if (url) {
+			suggestion["moreinfo"] = url;
+		}
+		this.suggestions.push(suggestion);
+	}
+	console.log( this.suggestions );
+
+	return this.suggestions;
+}
+
+// Wrapper code by James Padolsey
+// Source: http://james.padolsey.com/javascript/wordwrap-for-javascript/
+// License: "This is free and unencumbered software released into the public domain.",
+// see http://james.padolsey.com/terms-conditions/
+mw.languageToolAction.prototype._wordwrap = function(str, width, brk, cut) {
+	brk = brk || '\n';
+	width = width || 75;
+	cut = cut || false;
+	if (!str) { return str; }
+	var regex = '.{1,' +width+ '}(\\s|$)' + (cut ? '|.{' +width+ '}|.+$' : '|\\S+?(\\s|$)');
+	return str.match( new RegExp(regex, 'g') ).join( brk );
+};
+// End of wrapper code by James Padolsey
 
 /* Registration */
 
