@@ -16,11 +16,11 @@
 		]
 	},
 	"ResourceModules": {
-		"ext.languageTool": {
+		"ext.LanguageTool": {
 			"scripts": [
-				"modules/ext.languageTool.js",
-				"modules/ext.languageToolAction.js",
-				"modules/ext.languageToolCommand.js"
+				"modules/ext.LanguageTool.js",
+				"modules/ext.LanguageToolAction.js",
+				"modules/ext.LanguageToolCommand.js"
 			],
 			"dependencies": [
                 "ext.visualEditor.mwcore"
@@ -33,7 +33,7 @@
 	},
 	"config": {
 		"VisualEditorPluginModules": [
-			"ext.languageTool"
+			"ext.LanguageTool"
 		]
 	}
 }
