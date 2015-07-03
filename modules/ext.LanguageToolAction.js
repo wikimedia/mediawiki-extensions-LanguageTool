@@ -48,12 +48,12 @@ mw.languageToolAction.prototype.extract = function () {
 		var model = ve.init.target.getSurface().getModel();
 		function getTextNodes( obj ) {
 			var i;
- 
+
 			for ( i = 0; i < obj.children.length; i++ ) {
 				if ( obj.children[i].type === 'text'){
 					nodes.push(obj.children[i]);
 				}
- 
+
 				if ( obj.children[i].children ) {
 					getTextNodes( obj.children[i] );
 				}
@@ -85,7 +85,7 @@ mw.languageToolAction.prototype.send = function () {
 		{
 			type: 'POST',
 			dataType: 'text',
-			url: 'http://127.0.0.1:8081/', 
+			url: 'http://tools.wmflabs.org/languageproofing/',
 			data: {language: lang,  text: text}
 		}
 		)
@@ -101,7 +101,7 @@ mw.languageToolAction.prototype.send = function () {
 			windowManager.openWindow( messageDialog, {
     			title: 'LanguageTool Response',
     			message: d
-			} );	
+			} );
 		});
 		return;
 	}
