@@ -18,9 +18,9 @@
 	"ResourceModules": {
 		"ext.LanguageTool": {
 			"scripts": [
-				"modules/ext.LanguageTool.js",
-				"modules/ext.LanguageToolAction.js",
-				"modules/ext.LanguageToolCommand.js"
+				"ext.LanguageTool.js",
+				"ext.LanguageToolAction.js",
+				"ext.LanguageToolCommand.js"
 			],
 			"dependencies": [
                 "ext.visualEditor.mwcore"
@@ -28,8 +28,8 @@
 		}
 	},
 	"ResourceFileModulePaths": {
-		"localBasePath": "",
-		"remoteExtPath": "LanguageTool"
+		"localBasePath": "modules",
+		"remoteExtPath": "LanguageTool/modules"
 	},
 	"config": {
 		"VisualEditorPluginModules": [
