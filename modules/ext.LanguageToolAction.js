@@ -50,7 +50,7 @@ mw.languageToolAction.prototype.extract = function () {
 		var i;
 
 		for ( i = 0; i < obj.children.length; i++ ) {
-			if ( obj.children[i].type === 'text'){
+			if ( obj.children[i].type === 'text') {
 				nodes.push( obj.children[i] );
 			}
 
@@ -76,13 +76,13 @@ mw.languageToolAction.prototype.send = function () {
 
 	textNodes = this.extract();
 	model = ve.init.target.getSurface().getModel();
-	text = "";
+	text = '';
 
 	for ( nodeI = 0; nodeI < textNodes.length; nodeI++ ) {
 		node = textNodes[nodeI];
 		nodeRange = node.getRange();
 		nodeText = model.getLinearFragment( nodeRange ).getText();
-		text = text + "\n" + nodeText;
+		text = text + '\n' + nodeText;
 	}
 
 	// TODO: Get the language from VE's data model
@@ -90,7 +90,7 @@ mw.languageToolAction.prototype.send = function () {
 
 	$.ajax( {
 		type: 'POST',
-		//dataType: 'xml',
+		// dataType: 'xml',
 		url: 'http://tools.wmflabs.org/languageproofing/',
 		data: { language: lang,  text: text }
 	} ).done(
@@ -110,15 +110,15 @@ mw.languageToolAction.prototype.openDialog = function ( responseXML ) {
 	$( 'body' ).append( windowManager.$element );
 	windowManager.addWindows( [ messageDialog ] );
 
-	errors = responseXML.getElementsByTagName( "error" );
+	errors = responseXML.getElementsByTagName( 'error' );
 	console.log( errors );
 
-	response = "";
+	response = '';
 
 	for ( i = 0; i < errors.length; i++ ) {
-		response = response + "ERROR " + i + " :\n";
-		response = response + "error : " + errors[i].getAttribute( 'msg' ) + "\n";
-		response = response + "context : " + errors[i].getAttribute( 'context' ) + "\n";
+		response = response + 'ERROR ' + i + ' :\n';
+		response = response + 'error : ' + errors[i].getAttribute( 'msg' ) + '\n';
+		response = response + 'context : ' + errors[i].getAttribute( 'context' ) + '\n';
 		messageDialog.setData( 'error', errors[i].getAttribute( 'msg' ) );
 		messageDialog.setData( 'context', errors[i].getAttribute( 'context' ));
 	}
