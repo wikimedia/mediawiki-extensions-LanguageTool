@@ -51,7 +51,7 @@ mw.languageToolAction.prototype.extract = function () {
 
 		for ( i = 0; i < obj.children.length; i++ ) {
 			if ( obj.children[i].type === 'text'){
-				nodes.push(obj.children[i]);
+				nodes.push( obj.children[i] );
 			}
 
 			if ( obj.children[i].children ) {
@@ -59,7 +59,9 @@ mw.languageToolAction.prototype.extract = function () {
 			}
 		}
 	}
-	getTextNodes(ve.init.target.getSurface().getModel().getDocument().getDocumentNode());
+
+	getTextNodes( ve.init.target.getSurface().getModel().getDocument().getDocumentNode() );
+
 	return nodes;
 };
 
@@ -70,41 +72,49 @@ mw.languageToolAction.prototype.extract = function () {
  * @return {NULL} Action was executed
  */
 mw.languageToolAction.prototype.send = function () {
-	var textNodes = this.extract();
-	var model = ve.init.target.getSurface().getModel();
-	var text = "";
-	for (var nodeI = 0; nodeI < textNodes.length; nodeI++) {
-		var node = textNodes[nodeI];
-		var nodeRange = node.getRange();
-		var nodeText = model.getLinearFragment(nodeRange).getText();
+	var textNodes, model, text, nodeI, node, nodeRange, nodeText, lang;
+
+	textNodes = this.extract();
+	model = ve.init.target.getSurface().getModel();
+	text = "";
+
+	for ( nodeI = 0; nodeI < textNodes.length; nodeI++ ) {
+		node = textNodes[nodeI];
+		nodeRange = node.getRange();
+		nodeText = model.getLinearFragment( nodeRange ).getText();
 		text = text + "\n" + nodeText;
 	}
-	var lang = mw.config.get( 'wgPageContentLanguage' );
 
-	$.ajax(
-	{
+	// TODO: Get the language from VE's data model
+	lang = mw.config.get( 'wgPageContentLanguage' );
+
+	$.ajax( {
 		type: 'POST',
 		//dataType: 'xml',
 		url: 'http://tools.wmflabs.org/languageproofing/',
-		data: {language: lang,  text: text}
-	}
-	)
-	.done( this.openDialog );
+		data: { language: lang,  text: text }
+	} ).done(
+		this.openDialog
+	);
+
 	return;
 };
 
 mw.languageToolAction.prototype.openDialog = function ( responseXML ) {
-	var messageDialog = new OO.ui.MessageDialog();
+	var messageDialog, windowManager, errors, i, response;
 
-	// Create and append a window manager.
-	var windowManager = new OO.ui.WindowManager();
+	messageDialog = new OO.ui.MessageDialog();
+
+	// Create and append a window manager
+	windowManager = new OO.ui.WindowManager();
 	$( 'body' ).append( windowManager.$element );
 	windowManager.addWindows( [ messageDialog ] );
 
-	var errors = responseXML.getElementsByTagName( "error" );
-	console.log(errors);
-	var i;
-	var response = "";
+	errors = responseXML.getElementsByTagName( "error" );
+	console.log( errors );
+
+	response = "";
+
 	for ( i = 0; i < errors.length; i++ ) {
 		response = response + "ERROR " + i + " :\n";
 		response = response + "error : " + errors[i].getAttribute( 'msg' ) + "\n";
@@ -112,7 +122,8 @@ mw.languageToolAction.prototype.openDialog = function ( responseXML ) {
 		messageDialog.setData( 'error', errors[i].getAttribute( 'msg' ) );
 		messageDialog.setData( 'context', errors[i].getAttribute( 'context' ));
 	}
-	console.log(response);
+
+	console.log( response );
 	// Example: Creating and opening a message dialog window.
 	// Open the window.
 	windowManager.openWindow( messageDialog, {
