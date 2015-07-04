@@ -1,13 +1,6 @@
-
 ( function () {
-/*!
- * VisualEditor UserInterface HistoryCommand class.
- *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
- */
-
 /**
- * UserInterface history command.
+ * UserInterface LanguageTool command.
  *
  * @class
  * @extends ve.ui.Command
@@ -31,11 +24,8 @@ OO.inheritClass( mw.languageToolCommand, ve.ui.Command );
  * @inheritdoc
  */
 mw.languageToolCommand.prototype.isExecutable = function ( fragment ) {
-	var surface = fragment.getSurface();
-
 	// Parent method
-	return mw.languageToolCommand.super.prototype.isExecutable.apply( this, arguments ) 
-		// && surface[this.check].call( surface );
+	return mw.languageToolCommand.super.prototype.isExecutable.apply( this, arguments );
 };
 
 /* Registration */
