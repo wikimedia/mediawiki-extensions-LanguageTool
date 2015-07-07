@@ -18,10 +18,9 @@ mw.languageToolAction = function VeUiLanguageToolAction( surface ) {
 	// Parent constructor
 	ve.ui.Action.call( this, surface );
 	this.surfaceModel = this.surface.getModel();
-	//console.log( this.surfaceModel );
-	this.surrogateAttribute = "onkeypress";
+	this.surrogateAttribute = 'onkeypress';
 	this.surrogateAttributeDelimiter = "---#---";
-	this.ignoredRulesIds = [];
+	this.ignoredRulesIds = [ 'SENTENCE_WHITESPACE' ];
 	this.ignoredSpellingErrors = [];
 	this.$findResults = $( '<div>' ).addClass( 'hiddenSpellError' );
 	this.initialFragment = null;
@@ -82,22 +81,31 @@ mw.languageToolAction.prototype.extract = function () {
  * @return {NULL} Action was executed
  */
 mw.languageToolAction.prototype.send = function () {
-	var textNodes, model, text, nodeI, node, nodeRange, nodeText, lang, self;
+	var textNodes, model, text, nodeI, node, nodeRange, nodeText, lang, self,
+		data, textArray, mapper, i;
 
 	textNodes = this.extract();
 	model = ve.init.target.getSurface().getModel();
-	text = '';
 
-	for ( nodeI = 0; nodeI < textNodes.length; nodeI++ ) {
-		node = textNodes[nodeI];
-		nodeRange = node.getRange();
-		nodeText = model.getLinearFragment( nodeRange ).getText();
+	data = ve.init.target.getSurface().getModel().getDocument().data.getData();
 
-		console.log( nodeText );
-		text = text + '\n' + nodeText;
+	mapper = [];
+	for( i = 0; i < data.length; i++ ){
+		if( (typeof data[i]) === 'string' || ( typeof data[i][0] ) === 'string')
+			mapper.push(i);
+	}
+	textArray = [];
+
+	for( i = 0; i < mapper.length; i++ ){
+		if( ( typeof data[mapper[i]] ) === 'string'){
+			textArray[i] = data[mapper[i]];
+		}
+		else{
+			textArray[i] = data[mapper[i]][0];
+		}
 	}
 
-	console.log( text );
+	text = textArray.join('');
 
 	// TODO: Get the language from VE's data model
 	lang = mw.config.get( 'wgPageContentLanguage' );
@@ -109,25 +117,19 @@ mw.languageToolAction.prototype.send = function () {
 		url: 'http://tools.wmflabs.org/languageproofing/',
 		data: {language: lang,  text: text}
 	} ) .done( function( responseXML ) {
-		//console.log( responseXML );
-		self.openDialog.apply( self, [ responseXML, text ] );
+		self.openDialog.apply( self, [ responseXML, mapper ] );
 	} );
 
 	return;
 }
 
-mw.languageToolAction.prototype.openDialog = function ( responseXML, text ) {
-	var results, range, fragment, surfaceModel, languageCode, previousSpanStart,
+mw.languageToolAction.prototype.openDialog = function ( responseXML, mapper ) {
+	var range, fragment, surfaceModel, languageCode, previousSpanStart,
 		suggestionIndex, suggestion, spanStart, spanEnd, ruleId, cssName;
 
-	//console.log( this.constructor.name );
-	//this.processXML = mw.languageToolAction.prototype.processXML.bind( this );
-	//console.log( responseXML );
-	results = this.processXML( responseXML );
+	this.suggestions = this.processXML( responseXML );
 	surfaceModel = this.surface.getModel();
 
-	this.suggestions = results;
-	//console.log( results );
 	// TODO: Get the language from VE's data model
 	languageCode = mw.config.get( 'wgPageContentLanguage' );
 	previousSpanStart = -1;
@@ -147,25 +149,25 @@ mw.languageToolAction.prototype.openDialog = function ( responseXML, text ) {
 			}
 
 			previousSpanStart = spanStart;
-			//console.log( text.substring( spanStart, spanEnd ) );
-			range = new ve.Range( spanStart - 1, spanEnd );
+			range = new ve.Range( mapper[ spanStart ], mapper[ spanEnd ] );
 			fragment = surfaceModel.getLinearFragment( range, true );
-			//console.log( fragment );
-			console.log( fragment.getText() );
-			//fragment.annotate( 'set', 'textStyle/bold' );
-			console.log( spanStart + " , " + spanEnd);
 
 			ruleId = suggestion.ruleid;
+			if ( ruleId === 'SENTENCE_WHITESPACE' ) {
+				continue;
+			}
+			fragment.annotateContent( 'set', 'textStyle/highlight' );
+
 			cssName;
 
-			if ( ruleId.indexOf("SPELLER_RULE") >= 0 ||
-				ruleId.indexOf("MORFOLOGIK_RULE") == 0 ||
-				ruleId == "HUNSPELL_NO_SUGGEST_RULE" ||
-				ruleId == "HUNSPELL_RULE"
+			if ( ruleId.indexOf('SPELLER_RULE') >= 0 ||
+				ruleId.indexOf('MORFOLOGIK_RULE') === 0 ||
+				ruleId === 'HUNSPELL_NO_SUGGEST_RULE' ||
+				ruleId === 'HUNSPELL_RULE'
 			) {
-				cssName = "hiddenSpellError";
+				cssName = 'hiddenSpellError';
 			} else {
-				cssName = "hiddenGrammarError";
+				cssName = 'hiddenGrammarError';
 			}
 
 			suggestion.used = true;
@@ -176,45 +178,42 @@ mw.languageToolAction.prototype.openDialog = function ( responseXML, text ) {
 mw.languageToolAction.prototype.processXML = function ( responseXML ) {
 	var errors, i, suggestion, suggestionsStr, errorOffset, errorLength, url;
 
-	//console.log('entered');
 	this.suggestions = [];
-	//console.log( responseXML );
 	this._wordwrap = mw.languageToolAction.prototype._wordwrap.bind( this );
 	errors = responseXML.getElementsByTagName('error');
 
-    for ( i = 0; i < errors.length; i++ ) {
+	for ( i = 0; i < errors.length; i++ ) {
 		suggestion = {};
 		// I didn't manage to make the CSS break the text, so we add breaks with Javascript:
-		suggestion["description"] = this._wordwrap(errors[i].getAttribute("msg"), 50, "<br/>");
-		suggestion["suggestions"] = [];
-		suggestionsStr = errors[i].getAttribute("replacements");
+		suggestion['description'] = this._wordwrap(errors[i].getAttribute('msg'), 50, '<br/>');
+		suggestion['suggestions'] = [];
+		suggestionsStr = errors[i].getAttribute('replacements');
 
 		if (suggestionsStr) {
-			suggestion["suggestions"] = suggestionsStr;
+			suggestion['suggestions'] = suggestionsStr;
 		}
 
-		errorOffset = parseInt(errors[i].getAttribute("offset"));
-		errorLength = parseInt(errors[i].getAttribute("errorlength"));
-		suggestion["offset"] = errorOffset;
-		suggestion["errorlength"] = errorLength;
-		suggestion["type"] = errors[i].getAttribute("category");
-		suggestion["ruleid"] = errors[i].getAttribute("ruleId");
-		suggestion["subid"] = errors[i].getAttribute("subId");
-		url = errors[i].getAttribute("url");
+		errorOffset = parseInt(errors[i].getAttribute('offset'));
+		errorLength = parseInt(errors[i].getAttribute('errorlength'));
+		suggestion['offset'] = errorOffset;
+		suggestion['errorlength'] = errorLength;
+		suggestion['type'] = errors[i].getAttribute('category');
+		suggestion['ruleid'] = errors[i].getAttribute('ruleId');
+		suggestion['subid'] = errors[i].getAttribute('subId');
+		url = errors[i].getAttribute('url');
 
 		if (url) {
-			suggestion["moreinfo"] = url;
+			suggestion['moreinfo'] = url;
 		}
 		this.suggestions.push(suggestion);
 	}
 
-	//console.log( this.suggestions );
 	return this.suggestions;
 }
 
 // Wrapper code by James Padolsey
 // Source: http://james.padolsey.com/javascript/wordwrap-for-javascript/
-// License: "This is free and unencumbered software released into the public domain.",
+// License: 'This is free and unencumbered software released into the public domain.',
 // see http://james.padolsey.com/terms-conditions/
 mw.languageToolAction.prototype._wordwrap = function( str, width, brk, cut ) {
 	var regex;
