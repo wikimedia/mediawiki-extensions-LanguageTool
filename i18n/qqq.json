@@ -3,8 +3,9 @@
 		"authors": [
 			"Ankita Kumari",
 			"Eran Rosenthal",
-			"Amir E. Aharoni"
+			"Amir E. Aharoni",
+			"Amire80"
 		]
 	},
-	"languagetool-desc": "{{desc|name=LanguageTool|url=https://www.mediawiki.org/wiki/Extension:LanguageTool}}"
+	"languagetool-desc": "{{desc|name=LanguageTool|url=https://www.mediawiki.org/wiki/Extension:LanguageTool}}\n\nNote: \"LanguageTool\" is the name of the server software that does the error checking, and also the name of the MediaWiki extension that connects VisualEditor to that software."
 }
