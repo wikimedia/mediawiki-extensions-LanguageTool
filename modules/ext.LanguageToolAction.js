@@ -2,7 +2,10 @@
 /*!
  * VisualEditor UserInterface LanguageToolAction class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015
+ * Ankita Kumari
+ * Eran Rosenthal
+ * Amir E. Aharoni
  */
 
 /**
@@ -17,6 +20,7 @@
 mw.languageToolAction = function VeUiLanguageToolAction( surface ) {
 	// Parent constructor
 	ve.ui.Action.call( this, surface );
+
 	this.surfaceModel = this.surface.getModel();
 	this.surrogateAttribute = 'onkeypress';
 	this.surrogateAttributeDelimiter = "---#---";
@@ -25,6 +29,7 @@ mw.languageToolAction = function VeUiLanguageToolAction( surface ) {
 	this.$findResults = $( '<div>' ).addClass( 'hiddenSpellError' );
 	this.initialFragment = null;
 	this.fragments = [];
+
 	this.surface.$selections.append( this.$findResults );
 };
 
@@ -59,12 +64,12 @@ mw.languageToolAction.prototype.extract = function () {
 		var i;
 
 		for ( i = 0; i < obj.children.length; i++ ) {
-			if ( obj.children[i].type === 'text') {
-				nodes.push( obj.children[i] );
+			if ( obj.children[ i ].type === 'text') {
+				nodes.push( obj.children[ i ] );
 			}
 
 			if ( obj.children[i].children ) {
-				getTextNodes( obj.children[i] );
+				getTextNodes( obj.children[ i ] );
 			}
 		}
 	}
@@ -81,42 +86,41 @@ mw.languageToolAction.prototype.extract = function () {
  * @return {NULL} Action was executed
  */
 mw.languageToolAction.prototype.send = function () {
-	var textNodes, model, text, nodeI, node, nodeRange, nodeText, lang, self,
-		data, textArray, mapper, i;
+	var textNodes, model, data, mapper, i, textArray, text, lang,
+		self = this;
 
 	textNodes = this.extract();
 	model = ve.init.target.getSurface().getModel();
 
-	data = ve.init.target.getSurface().getModel().getDocument().data.getData();
+	data = model.getDocument().data.getData();
 
 	mapper = [];
-	for( i = 0; i < data.length; i++ ){
-		if( (typeof data[i]) === 'string' || ( typeof data[i][0] ) === 'string')
+	for ( i = 0; i < data.length; i++ ){
+		if ( ( typeof data[i]) === 'string' || ( typeof data[i][0] ) === 'string' ) {
 			mapper.push(i);
+		}
 	}
-	textArray = [];
 
-	for( i = 0; i < mapper.length; i++ ){
+	textArray = [];
+	for ( i = 0; i < mapper.length; i++ ) {
 		if( ( typeof data[mapper[i]] ) === 'string'){
 			textArray[i] = data[mapper[i]];
-		}
-		else{
+		} else {
 			textArray[i] = data[mapper[i]][0];
 		}
 	}
 
-	text = textArray.join('');
+	text = textArray.join( '' );
 
 	// TODO: Get the language from VE's data model
 	lang = mw.config.get( 'wgPageContentLanguage' );
-	self = this;
 
 	$.ajax( {
 		type: 'POST',
 		dataType: 'xml',
 		url: 'http://tools.wmflabs.org/languageproofing/',
-		data: {language: lang,  text: text}
-	} ) .done( function( responseXML ) {
+		data: { language: lang, text: text }
+	} ).done( function( responseXML ) {
 		self.openDialog.apply( self, [ responseXML, mapper ] );
 	} );
 
@@ -124,8 +128,9 @@ mw.languageToolAction.prototype.send = function () {
 }
 
 mw.languageToolAction.prototype.openDialog = function ( responseXML, mapper ) {
-	var range, fragment, surfaceModel, languageCode, previousSpanStart,
-		suggestionIndex, suggestion, spanStart, spanEnd, ruleId, cssName;
+	var surfaceModel, languageCode, previousSpanStart,
+		suggestionIndex, suggestion, spanStart, spanEnd,
+		range, fragment, ruleId, cssName;
 
 	this.suggestions = this.processXML( responseXML );
 	surfaceModel = this.surface.getModel();
@@ -158,8 +163,6 @@ mw.languageToolAction.prototype.openDialog = function ( responseXML, mapper ) {
 			}
 			fragment.annotateContent( 'set', 'textStyle/highlight' );
 
-			cssName;
-
 			if ( ruleId.indexOf('SPELLER_RULE') >= 0 ||
 				ruleId.indexOf('MORFOLOGIK_RULE') === 0 ||
 				ruleId === 'HUNSPELL_NO_SUGGEST_RULE' ||
@@ -180,32 +183,36 @@ mw.languageToolAction.prototype.processXML = function ( responseXML ) {
 
 	this.suggestions = [];
 	this._wordwrap = mw.languageToolAction.prototype._wordwrap.bind( this );
-	errors = responseXML.getElementsByTagName('error');
+	errors = responseXML.getElementsByTagName( 'error' );
 
 	for ( i = 0; i < errors.length; i++ ) {
 		suggestion = {};
+
 		// I didn't manage to make the CSS break the text, so we add breaks with Javascript:
-		suggestion['description'] = this._wordwrap(errors[i].getAttribute('msg'), 50, '<br/>');
-		suggestion['suggestions'] = [];
-		suggestionsStr = errors[i].getAttribute('replacements');
+		suggestion[ 'description' ] = this._wordwrap(
+			errors[ i ].getAttribute( 'msg' ), 50, '<br/>'
+		);
+		suggestion[ 'suggestions' ] = [];
+		suggestionsStr = errors[i].getAttribute( 'replacements' );
 
-		if (suggestionsStr) {
-			suggestion['suggestions'] = suggestionsStr;
+		if ( suggestionsStr ) {
+			suggestion[ 'suggestions' ] = suggestionsStr;
 		}
 
-		errorOffset = parseInt(errors[i].getAttribute('offset'));
-		errorLength = parseInt(errors[i].getAttribute('errorlength'));
-		suggestion['offset'] = errorOffset;
-		suggestion['errorlength'] = errorLength;
-		suggestion['type'] = errors[i].getAttribute('category');
-		suggestion['ruleid'] = errors[i].getAttribute('ruleId');
-		suggestion['subid'] = errors[i].getAttribute('subId');
-		url = errors[i].getAttribute('url');
+		errorOffset = parseInt( errors[ i ].getAttribute( 'offset' ) );
+		errorLength = parseInt( errors[ i ].getAttribute( 'errorlength' ) );
+		suggestion[ 'offset' ] = errorOffset;
+		suggestion[ 'errorlength' ] = errorLength;
+		suggestion[ 'type' ] = errors[ i ].getAttribute( 'category' );
+		suggestion[ 'ruleid' ] = errors[ i ].getAttribute( 'ruleId' );
+		suggestion[ 'subid' ] = errors[ i ].getAttribute( 'subId' );
+		url = errors[ i ].getAttribute( 'url' );
 
-		if (url) {
-			suggestion['moreinfo'] = url;
+		if ( url ) {
+			suggestion[ 'moreinfo' ] = url;
 		}
-		this.suggestions.push(suggestion);
+
+		this.suggestions.push( suggestion );
 	}
 
 	return this.suggestions;
@@ -218,15 +225,15 @@ mw.languageToolAction.prototype.processXML = function ( responseXML ) {
 mw.languageToolAction.prototype._wordwrap = function( str, width, brk, cut ) {
 	var regex;
 
-	brk = brk || '\n';
 	width = width || 75;
+	brk = brk || '\n';
 	cut = cut || false;
 
-	if (!str) {
+	if ( !str ) {
 		return str;
 	}
 
-	regex = '.{1,' +width+ '}(\\s|$)' + (cut ? '|.{' +width+ '}|.+$' : '|\\S+?(\\s|$)');
+	regex = '.{1,' + width + '}(\\s|$)' + ( cut ? '|.{' +width+ '}|.+$' : '|\\S+?(\\s|$)');
 
 	return str.match( new RegExp(regex, 'g') ).join( brk );
 };
