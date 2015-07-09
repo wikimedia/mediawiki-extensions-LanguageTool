@@ -29,6 +29,7 @@ mw.languageToolAction = function VeUiLanguageToolAction( surface ) {
 	this.$errors = $( '<div>' ).addClass( 'hiddenSpellError' );
 	this.initialFragment = null;
 	this.fragments = [];
+	this.cssNames = [];
 
 	this.surface.$selections.append( this.$errors );
 };
@@ -99,9 +100,9 @@ mw.languageToolAction.prototype.send = function () {
 }
 
 mw.languageToolAction.prototype.openDialog = function ( responseXML, mapper ) {
-	var languageCode, previousSpanStart,
+	var languageCode, previousSpanStart, cssName,
 		suggestionIndex, suggestion, spanStart, spanEnd,
-		range, fragment, ruleId, cssName;
+		range, fragment, ruleId;
 
 	this.suggestions = this.processXML( responseXML );
 
@@ -143,10 +144,11 @@ mw.languageToolAction.prototype.openDialog = function ( responseXML, mapper ) {
 			} else {
 				cssName = 'hiddenGrammarError';
 			}
-			this.highlightFragments();
+			this.cssNames.push( cssName );
 			suggestion.used = true;
 		}
 	}
+	this.highlightFragments();
 }
 
 /**
@@ -160,7 +162,7 @@ mw.languageToolAction.prototype.highlightFragments = function () {
 	this.$errors.empty();
 	for ( i = 0; i < this.fragments.length; i++ ) {
 		rects = this.surface.getView().getSelectionRects( this.fragments[i].getSelection() );
-		$result = $( '<div>' ).addClass( 've-ui-findAndReplaceDialog-findResult' );
+		$result = $( '<div>' ).addClass( this.cssNames[i] );
 		for ( j = 0; j < rects.length; j++ ) {
 			$result.append( $( '<div>' ).css( {
 				top: rects[j].top,
