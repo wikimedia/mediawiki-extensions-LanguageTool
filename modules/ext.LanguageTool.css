@@ -1,13 +1,13 @@
 .hiddenSpellError {
-        background-color: rgba(255,0,0, 0.2);
-        cursor: pointer;
+	background-color: rgba(255, 0, 0, 0.2);
+	cursor: pointer;
 }
 
 .hiddenGrammarError {
-        background-color: #fee481;
-        cursor: pointer;
+	background-color: #fee481;
+	cursor: pointer;
 }
 
 .hiddenSuggestion {
-        background-color: #fee481;
+	background-color: #fee481;
 }
