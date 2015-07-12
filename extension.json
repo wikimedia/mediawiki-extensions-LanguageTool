@@ -3,8 +3,8 @@
 	"version": "0.0.0",
 	"author": [
 		"Ankita Kumari",
-        "Amir E. Aharoni",
-        "Eran Rosenthal"
+		"Amir E. Aharoni",
+		"Eran Rosenthal"
 	],
 	"url": "https://www.mediawiki.org/wiki/Extension:LanguageTool",
 	"descriptionmsg": "languagetool-desc",
@@ -22,9 +22,12 @@
 				"ext.LanguageToolAction.js",
 				"ext.LanguageToolCommand.js"
 			],
+			"styles": [
+				"ext.LanguageTool.css"
+			],
 			"dependencies": [
-                "ext.visualEditor.mwcore"
-            ]
+				"ext.visualEditor.mwcore"
+			]
 		}
 	},
 	"ResourceFileModulePaths": {

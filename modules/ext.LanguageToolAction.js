@@ -26,11 +26,11 @@ mw.languageToolAction = function VeUiLanguageToolAction( surface ) {
 	this.surrogateAttributeDelimiter = "---#---";
 	this.ignoredRulesIds = [ 'SENTENCE_WHITESPACE' ];
 	this.ignoredSpellingErrors = [];
-	this.$findResults = $( '<div>' ).addClass( 'hiddenSpellError' );
+	this.$errors = $( '<div>' ).addClass( 'hiddenSpellError' );
 	this.initialFragment = null;
 	this.fragments = [];
 
-	this.surface.$selections.append( this.$findResults );
+	this.surface.$selections.append( this.$errors );
 };
 
 /* Inheritance */
@@ -99,12 +99,11 @@ mw.languageToolAction.prototype.send = function () {
 }
 
 mw.languageToolAction.prototype.openDialog = function ( responseXML, mapper ) {
-	var surfaceModel, languageCode, previousSpanStart,
+	var languageCode, previousSpanStart,
 		suggestionIndex, suggestion, spanStart, spanEnd,
 		range, fragment, ruleId, cssName;
 
 	this.suggestions = this.processXML( responseXML );
-	surfaceModel = this.surface.getModel();
 
 	// TODO: Get the language from VE's data model
 	languageCode = mw.config.get( 'wgPageContentLanguage' );
@@ -126,13 +125,14 @@ mw.languageToolAction.prototype.openDialog = function ( responseXML, mapper ) {
 
 			previousSpanStart = spanStart;
 			range = new ve.Range( mapper[ spanStart ], mapper[ spanEnd ] );
-			fragment = surfaceModel.getLinearFragment( range, true );
+			fragment = this.surfaceModel.getLinearFragment( range, true );
 
 			ruleId = suggestion.ruleid;
 			if ( ruleId === 'SENTENCE_WHITESPACE' ) {
 				continue;
 			}
-			fragment.annotateContent( 'set', 'textStyle/highlight' );
+
+			this.fragments.push( this.surfaceModel.getLinearFragment( range, true, true ) );
 
 			if ( ruleId.indexOf('SPELLER_RULE') >= 0 ||
 				ruleId.indexOf('MORFOLOGIK_RULE') === 0 ||
@@ -143,11 +143,35 @@ mw.languageToolAction.prototype.openDialog = function ( responseXML, mapper ) {
 			} else {
 				cssName = 'hiddenGrammarError';
 			}
-
+			this.highlightFragments();
 			suggestion.used = true;
 		}
 	}
 }
+
+/**
+ * Render subset of search result fragments
+ *
+ * @param {ve.Range} range Range of fragments to render
+ */
+mw.languageToolAction.prototype.highlightFragments = function () {
+	var i, j, rects, $result, top;
+
+	this.$errors.empty();
+	for ( i = 0; i < this.fragments.length; i++ ) {
+		rects = this.surface.getView().getSelectionRects( this.fragments[i].getSelection() );
+		$result = $( '<div>' ).addClass( 've-ui-findAndReplaceDialog-findResult' );
+		for ( j = 0; j < rects.length; j++ ) {
+			$result.append( $( '<div>' ).css( {
+				top: rects[j].top,
+				left: rects[j].left,
+				width: rects[j].width,
+				height: rects[j].height
+			} ) );
+		}
+		this.$errors.append( $result );
+	}
+};
 
 mw.languageToolAction.prototype.processXML = function ( responseXML ) {
 	var errors, i, suggestion, suggestionsStr, errorOffset, errorLength, url;
