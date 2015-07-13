@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Windes"
+		]
+	},
+	"languagetool-desc": "Permet aux éditeurs de corriger l'orthographe et la grammaire à l'aide de [https://languagetool.org/ LanguageTool]"
+}
