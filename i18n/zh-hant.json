@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Cwlin0416"
+		]
+	},
+	"languagetool-desc": "使用 [https://languagetool.org/ LanguageTool] 協助編輯器修正拼音與文法錯誤"
+}
