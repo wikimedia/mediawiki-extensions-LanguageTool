@@ -20,7 +20,8 @@
 			"scripts": [
 				"ext.LanguageTool.js",
 				"ext.LanguageToolAction.js",
-				"ext.LanguageToolCommand.js"
+				"ext.LanguageToolCommand.js",
+				"ext.LanguageToolDialog.js"
 			],
 			"styles": [
 				"ext.LanguageTool.css"
