@@ -39,5 +39,6 @@
 		"VisualEditorPluginModules": [
 			"ext.LanguageTool"
 		]
-	}
+	},
+	"manifest_version": 1
 }
