@@ -23,7 +23,7 @@ mw.languageToolAction = function VeUiLanguageToolAction( surface ) {
 
 	this.surfaceModel = this.surface.getModel();
 	this.surrogateAttribute = 'onkeypress';
-	this.surrogateAttributeDelimiter = "---#---";
+	this.surrogateAttributeDelimiter = '---#---';
 	this.ignoredRulesIds = [ 'SENTENCE_WHITESPACE' ];
 	this.ignoredSpellingErrors = [];
 	this.$errors = $( '<div>' ).addClass( 'hiddenSpellError' );
@@ -67,18 +67,18 @@ mw.languageToolAction.prototype.send = function () {
 	data = model.getDocument().data.getData();
 
 	mapper = [];
-	for ( i = 0; i < data.length; i++ ){
-		if ( ( typeof data[i]) === 'string' || ( typeof data[i][0] ) === 'string' ) {
-			mapper.push(i);
+	for ( i = 0; i < data.length; i++ ) {
+		if ( ( typeof data[ i ] ) === 'string' || ( typeof data[ i ][ 0 ] ) === 'string' ) {
+			mapper.push( i );
 		}
 	}
 
 	textArray = [];
 	for ( i = 0; i < mapper.length; i++ ) {
-		if( ( typeof data[mapper[i]] ) === 'string'){
-			textArray[i] = data[mapper[i]];
+		if ( ( typeof data[ mapper[ i ] ] ) === 'string' ) {
+			textArray[ i ] = data[ mapper[ i ] ];
 		} else {
-			textArray[i] = data[mapper[i]][0];
+			textArray[ i ] = data[ mapper[ i ] ][ 0 ];
 		}
 	}
 
@@ -92,12 +92,12 @@ mw.languageToolAction.prototype.send = function () {
 		dataType: 'xml',
 		url: 'http://tools.wmflabs.org/languageproofing/',
 		data: { language: lang, text: text }
-	} ).done( function( responseXML ) {
+	} ).done( function ( responseXML ) {
 		self.openDialog.apply( self, [ responseXML, mapper ] );
 	} );
 
 	return;
-}
+};
 
 mw.languageToolAction.prototype.openDialog = function ( responseXML, mapper ) {
 	var languageCode, previousSpanStart, cssName,
@@ -112,13 +112,13 @@ mw.languageToolAction.prototype.openDialog = function ( responseXML, mapper ) {
 
 	// iterate backwards as we change the text and thus modify positions:
 	for ( suggestionIndex = this.suggestions.length - 1; suggestionIndex >= 0; suggestionIndex-- ) {
-		suggestion = this.suggestions[suggestionIndex];
+		suggestion = this.suggestions[ suggestionIndex ];
 
-		if (!suggestion.used) {
+		if ( !suggestion.used ) {
 			spanStart = suggestion.offset;
 			spanEnd = spanStart + suggestion.errorlength;
 
-			if (previousSpanStart != -1 && spanEnd > previousSpanStart) {
+			if ( previousSpanStart !== -1 && spanEnd > previousSpanStart ) {
 				// overlapping errors - these are not supported by our underline approach,
 				// as we would need overlapping <span>s for that, so skip the error:
 				continue;
@@ -135,8 +135,8 @@ mw.languageToolAction.prototype.openDialog = function ( responseXML, mapper ) {
 
 			this.fragments.push( this.surfaceModel.getLinearFragment( range, true, true ) );
 
-			if ( ruleId.indexOf('SPELLER_RULE') >= 0 ||
-				ruleId.indexOf('MORFOLOGIK_RULE') === 0 ||
+			if ( ruleId.indexOf( 'SPELLER_RULE' ) >= 0 ||
+				ruleId.indexOf( 'MORFOLOGIK_RULE' ) === 0 ||
 				ruleId === 'HUNSPELL_NO_SUGGEST_RULE' ||
 				ruleId === 'HUNSPELL_RULE'
 			) {
@@ -149,7 +149,7 @@ mw.languageToolAction.prototype.openDialog = function ( responseXML, mapper ) {
 		}
 	}
 	this.highlightFragments();
-}
+};
 
 /**
  * Render subset of search result fragments
@@ -158,17 +158,18 @@ mw.languageToolAction.prototype.openDialog = function ( responseXML, mapper ) {
  */
 mw.languageToolAction.prototype.highlightFragments = function () {
 	var i, j, rects, $result, top;
+	window.console.log( 'Not using: ', top ); // FIXME
 
 	this.$errors.empty();
 	for ( i = 0; i < this.fragments.length; i++ ) {
-		rects = this.surface.getView().getSelectionRects( this.fragments[i].getSelection() );
-		$result = $( '<div>' ).addClass( this.cssNames[i] );
+		rects = this.surface.getView().getSelectionRects( this.fragments[ i ].getSelection() );
+		$result = $( '<div>' ).addClass( this.cssNames[ i ] );
 		for ( j = 0; j < rects.length; j++ ) {
 			$result.append( $( '<div>' ).css( {
-				top: rects[j].top,
-				left: rects[j].left,
-				width: rects[j].width,
-				height: rects[j].height
+				top: rects[ j ].top,
+				left: rects[ j ].left,
+				width: rects[ j ].width,
+				height: rects[ j ].height
 			} ) );
 		}
 		this.$errors.append( $result );
@@ -179,47 +180,47 @@ mw.languageToolAction.prototype.processXML = function ( responseXML ) {
 	var errors, i, suggestion, suggestionsStr, errorOffset, errorLength, url;
 
 	this.suggestions = [];
-	this._wordwrap = mw.languageToolAction.prototype._wordwrap.bind( this );
+	this.wordwrap = mw.languageToolAction.prototype.wordwrap.bind( this );
 	errors = responseXML.getElementsByTagName( 'error' );
 
 	for ( i = 0; i < errors.length; i++ ) {
 		suggestion = {};
 
 		// I didn't manage to make the CSS break the text, so we add breaks with Javascript:
-		suggestion[ 'description' ] = this._wordwrap(
+		suggestion.description = this.wordwrap(
 			errors[ i ].getAttribute( 'msg' ), 50, '<br/>'
 		);
-		suggestion[ 'suggestions' ] = [];
-		suggestionsStr = errors[i].getAttribute( 'replacements' );
+		suggestion.suggestions = [];
+		suggestionsStr = errors[ i ].getAttribute( 'replacements' );
 
 		if ( suggestionsStr ) {
-			suggestion[ 'suggestions' ] = suggestionsStr;
+			suggestion.suggestions = suggestionsStr;
 		}
 
 		errorOffset = parseInt( errors[ i ].getAttribute( 'offset' ) );
 		errorLength = parseInt( errors[ i ].getAttribute( 'errorlength' ) );
-		suggestion[ 'offset' ] = errorOffset;
-		suggestion[ 'errorlength' ] = errorLength;
-		suggestion[ 'type' ] = errors[ i ].getAttribute( 'category' );
-		suggestion[ 'ruleid' ] = errors[ i ].getAttribute( 'ruleId' );
-		suggestion[ 'subid' ] = errors[ i ].getAttribute( 'subId' );
+		suggestion.offset = errorOffset;
+		suggestion.errorlength = errorLength;
+		suggestion.type = errors[ i ].getAttribute( 'category' );
+		suggestion.ruleid = errors[ i ].getAttribute( 'ruleId' );
+		suggestion.subid = errors[ i ].getAttribute( 'subId' );
 		url = errors[ i ].getAttribute( 'url' );
 
 		if ( url ) {
-			suggestion[ 'moreinfo' ] = url;
+			suggestion.moreinfo = url;
 		}
 
 		this.suggestions.push( suggestion );
 	}
 
 	return this.suggestions;
-}
+};
 
 // Wrapper code by James Padolsey
 // Source: http://james.padolsey.com/javascript/wordwrap-for-javascript/
 // License: 'This is free and unencumbered software released into the public domain.',
 // see http://james.padolsey.com/terms-conditions/
-mw.languageToolAction.prototype._wordwrap = function( str, width, brk, cut ) {
+mw.languageToolAction.prototype.wordwrap = function ( str, width, brk, cut ) {
 	var regex;
 
 	width = width || 75;
@@ -230,9 +231,9 @@ mw.languageToolAction.prototype._wordwrap = function( str, width, brk, cut ) {
 		return str;
 	}
 
-	regex = '.{1,' + width + '}(\\s|$)' + ( cut ? '|.{' +width+ '}|.+$' : '|\\S+?(\\s|$)');
+	regex = '.{1,' + width + '}(\\s|$)' + ( cut ? '|.{' + width + '}|.+$' : '|\\S+?(\\s|$)' );
 
-	return str.match( new RegExp(regex, 'g') ).join( brk );
+	return str.match( new RegExp( regex, 'g' ) ).join( brk );
 };
 // End of wrapper code by James Padolsey
 

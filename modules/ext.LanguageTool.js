@@ -4,7 +4,8 @@
 	 * @singleton
 	 */
 	mw.languageTool = function VeUiMWLanguageTool( toolGroup, config ) {
-		//ve.ui.DialogTool.call( this, toolGroup, config );
+		// ve.ui.DialogTool.call( this, toolGroup, config );
+		window.console.log( 'Not using: ', toolGroup, config ); // FIXME
 		mw.languageTool.super.apply( this, arguments );
 	};
 

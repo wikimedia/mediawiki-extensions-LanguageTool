@@ -24,6 +24,8 @@ OO.inheritClass( mw.languageToolCommand, ve.ui.Command );
  * @inheritdoc
  */
 mw.languageToolCommand.prototype.isExecutable = function ( fragment ) {
+	window.console.log( 'Not using: ', fragment ); // FIXME
+
 	// Parent method
 	return mw.languageToolCommand.super.prototype.isExecutable.apply( this, arguments );
 };

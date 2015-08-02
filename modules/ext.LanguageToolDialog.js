@@ -53,7 +53,7 @@ mw.LanguageToolDialog.prototype.initialize = function () {
 	this.surface = null;
 	this.suggestions = [];
 	this.ranges = [];
-	this.suggestionMapper =[];
+	this.suggestionMapper = [];
 	this.cssNames = [];
 	this.$errors = $( '<div>' ).addClass( 'hiddenSpellError' );
 	this.$findResults = $( '<div>' ).addClass( 've-ui-findAndReplaceDialog-findResults' );
@@ -72,7 +72,7 @@ mw.LanguageToolDialog.prototype.initialize = function () {
 	} );
 	this.sendButton = new OO.ui.ButtonWidget( {
 		icon: 'check',
-		iconTitle : 'LanguageTool'
+		iconTitle: 'LanguageTool'
 	} );
 	this.previousButton = new OO.ui.ButtonWidget( {
 		icon: 'previous',
@@ -130,7 +130,7 @@ mw.LanguageToolDialog.prototype.initialize = function () {
 		change: 'onFindChange',
 		enter: 'onFindTextEnter'
 	} );
-	this.sendButton.connect( this, { click: 'send'} );
+	this.sendButton.connect( this, { click: 'send' } );
 	this.nextButton.connect( this, { click: 'findNext' } );
 	this.previousButton.connect( this, { click: 'findPrevious' } );
 	this.replaceButton.connect( this, { click: 'onReplaceButtonClick' } );
@@ -217,7 +217,7 @@ mw.LanguageToolDialog.prototype.getTeardownProcess = function ( data ) {
 			if ( surfaceModel.getSelection() instanceof ve.dm.NullSelection ) {
 				if ( this.fragments.length ) {
 					// Either the active search result...
-					selection = this.fragments[this.focusedIndex].getSelection();
+					selection = this.fragments[ this.focusedIndex ].getSelection();
 				} else if ( !( this.initialFragment.getSelection() instanceof ve.dm.NullSelection ) ) {
 					// ... or the initial selection
 					selection = this.initialFragment.getSelection();
@@ -287,7 +287,7 @@ mw.LanguageToolDialog.prototype.updateFragments = function () {
 	if ( this.query ) {
 		ranges = documentModel.findText( this.query, /*matchCase,*/ true );
 		for ( i = 0, l = ranges.length; i < l; i++ ) {
-			this.fragments.push( surfaceModel.getLinearFragment( ranges[i], true, true ) );
+			this.fragments.push( surfaceModel.getLinearFragment( ranges[ i ], true, true ) );
 		}
 	}
 	this.results = this.fragments.length;
@@ -314,7 +314,7 @@ mw.LanguageToolDialog.prototype.renderFragments = function () {
 	if ( this.results > 50 ) {
 		viewportRange = this.surface.getView().getViewportRange();
 		for ( i = 0; i < this.results; i++ ) {
-			selection = this.fragments[i].getSelection();
+			selection = this.fragments[ i ].getSelection();
 			if ( viewportRange && selection.getRange().start < viewportRange.start ) {
 				start = i + 1;
 				continue;
@@ -343,16 +343,16 @@ mw.LanguageToolDialog.prototype.renderRangeOfFragments = function ( range ) {
 	var i, j, jlen, rects, $result, top;
 	this.$findResults.empty();
 	for ( i = range.start; i < range.end; i++ ) {
-		rects = this.surface.getView().getSelectionRects( this.fragments[i].getSelection() );
+		rects = this.surface.getView().getSelectionRects( this.fragments[ i ].getSelection() );
 		$result = $( '<div>' ).addClass( 've-ui-findAndReplaceDialog-findResult' );
 		top = Infinity;
 		for ( j = 0, jlen = rects.length; j < jlen; j++ ) {
-			top = Math.min( top, rects[j].top );
+			top = Math.min( top, rects[ j ].top );
 			$result.append( $( '<div>' ).css( {
-				top: rects[j].top,
-				left: rects[j].left,
-				width: rects[j].width,
-				height: rects[j].height
+				top: rects[ j ].top,
+				left: rects[ j ].left,
+				width: rects[ j ].width,
+				height: rects[ j ].height
 			} ) );
 		}
 		$result.data( 'top', top );
@@ -394,7 +394,7 @@ mw.LanguageToolDialog.prototype.highlightFocused = function ( scrollIntoView ) {
 		top = $result.data( 'top' );
 	} else if ( scrollIntoView ) {
 		// If we're about to scroll into view and the result isn't rendered, compute the offset manually.
-		rect = surfaceView.getSelectionBoundingRect( this.fragments[this.focusedIndex].getSelection() );
+		rect = surfaceView.getSelectionBoundingRect( this.fragments[ this.focusedIndex ].getSelection() );
 		top = rect.top;
 	}
 
@@ -440,7 +440,7 @@ mw.LanguageToolDialog.prototype.onReplaceButtonClick = function () {
 
 	// Find the next fragment after this one ends. Ensures that if we replace
 	// 'foo' with 'foofoo' we don't select the just-inserted text.
-	end = this.fragments[this.focusedIndex].getSelection().getRange().end;
+	end = this.fragments[ this.focusedIndex ].getSelection().getRange().end;
 	// updateFragmentsDebounced is triggered by insertContent, but call it immediately
 	// so we can find the next fragment to select.
 	this.updateFragments();
@@ -448,7 +448,7 @@ mw.LanguageToolDialog.prototype.onReplaceButtonClick = function () {
 		this.focusedIndex = 0;
 		return;
 	}
-	while ( this.fragments[this.focusedIndex] && this.fragments[this.focusedIndex].getSelection().getRange().end <= end ) {
+	while ( this.fragments[ this.focusedIndex ] && this.fragments[ this.focusedIndex ].getSelection().getRange().end <= end ) {
 		this.focusedIndex++;
 	}
 	// We may have iterated off the end
@@ -473,7 +473,7 @@ mw.LanguageToolDialog.prototype.onReplaceAllButtonClick = function () {
  */
 mw.LanguageToolDialog.prototype.replace = function ( index ) {
 	var replace = this.replaceText.getValue();
-	this.fragments[index].insertContent( replace, true );
+	this.fragments[ index ].insertContent( replace, true );
 };
 
 /**
@@ -491,18 +491,18 @@ mw.LanguageToolDialog.prototype.send = function () {
 	data = model.getDocument().data.getData();
 
 	mapper = [];
-	for ( i = 0; i < data.length; i++ ){
-		if ( ( typeof data[i]) === 'string' || ( typeof data[i][0] ) === 'string' ) {
-			mapper.push(i);
+	for ( i = 0; i < data.length; i++ ) {
+		if ( ( typeof data[ i ] ) === 'string' || ( typeof data[ i ][ 0 ] ) === 'string' ) {
+			mapper.push( i );
 		}
 	}
 
 	textArray = [];
 	for ( i = 0; i < mapper.length; i++ ) {
-		if( ( typeof data[mapper[i]] ) === 'string'){
-			textArray[i] = data[mapper[i]];
+		if ( ( typeof data[ mapper[ i ] ] ) === 'string' ) {
+			textArray[ i ] = data[ mapper[ i ] ];
 		} else {
-			textArray[i] = data[mapper[i]][0];
+			textArray[ i ] = data[ mapper[ i ] ][ 0 ];
 		}
 	}
 
@@ -516,8 +516,8 @@ mw.LanguageToolDialog.prototype.send = function () {
 		dataType: 'xml',
 		url: 'http://tools.wmflabs.org/languageproofing/',
 		data: { language: lang, text: text }
-	} ).done( function( responseXML ) {
-		//console.log( responseXML );
+	} ).done( function ( responseXML ) {
+		// console.log( responseXML );
 		self.openDialog.apply( self, [ responseXML, mapper ] );
 	} );
 	return;
@@ -536,14 +536,13 @@ mw.LanguageToolDialog.prototype.openDialog = function ( responseXML, mapper ) {
 
 	// iterate backwards as we change the text and thus modify positions:
 	for ( suggestionIndex = this.suggestions.length - 1; suggestionIndex >= 0; suggestionIndex-- ) {
-		suggestion = this.suggestions[suggestionIndex];
+		suggestion = this.suggestions[ suggestionIndex ];
 
-
-		if (!suggestion.used) {
+		if ( !suggestion.used ) {
 			spanStart = suggestion.offset;
 			spanEnd = spanStart + suggestion.errorlength;
 
-			if (previousSpanStart != -1 && spanEnd > previousSpanStart) {
+			if ( previousSpanStart !== -1 && spanEnd > previousSpanStart ) {
 				// overlapping errors - these are not supported by our underline approach,
 				// as we would need overlapping <span>s for that, so skip the error:
 				continue;
@@ -561,8 +560,8 @@ mw.LanguageToolDialog.prototype.openDialog = function ( responseXML, mapper ) {
 			this.suggestionMapper.push( suggestionIndex );
 			this.fragments.push( surfaceModel.getLinearFragment( range, true, true ) );
 
-			if ( ruleId.indexOf('SPELLER_RULE') >= 0 ||
-				ruleId.indexOf('MORFOLOGIK_RULE') === 0 ||
+			if ( ruleId.indexOf( 'SPELLER_RULE' ) >= 0 ||
+				ruleId.indexOf( 'MORFOLOGIK_RULE' ) === 0 ||
 				ruleId === 'HUNSPELL_NO_SUGGEST_RULE' ||
 				ruleId === 'HUNSPELL_RULE'
 			) {
@@ -581,47 +580,47 @@ mw.LanguageToolDialog.prototype.processXML = function ( responseXML ) {
 	var errors, i, suggestion, suggestionsStr, errorOffset, errorLength, url;
 
 	this.suggestions = [];
-	//this._wordwrap = mw.languageToolAction.prototype._wordwrap.bind( this );
+	// this.wordwrap = mw.languageToolAction.prototype.wordwrap.bind( this );
 	errors = responseXML.getElementsByTagName( 'error' );
 
 	for ( i = 0; i < errors.length; i++ ) {
 		suggestion = {};
 
 		// I didn't manage to make the CSS break the text, so we add breaks with Javascript:
-		suggestion[ 'description' ] = this._wordwrap(
+		suggestion.description = this.wordwrap(
 			errors[ i ].getAttribute( 'msg' ), 50, '<br/>'
 		);
-		suggestion[ 'suggestions' ] = [];
-		suggestionsStr = errors[i].getAttribute( 'replacements' );
+		suggestion.suggestions = [];
+		suggestionsStr = errors[ i ].getAttribute( 'replacements' );
 
 		if ( suggestionsStr ) {
-			suggestion[ 'suggestions' ] = suggestionsStr;
+			suggestion.suggestions = suggestionsStr;
 		}
 
 		errorOffset = parseInt( errors[ i ].getAttribute( 'offset' ) );
 		errorLength = parseInt( errors[ i ].getAttribute( 'errorlength' ) );
-		suggestion[ 'offset' ] = errorOffset;
-		suggestion[ 'errorlength' ] = errorLength;
-		suggestion[ 'type' ] = errors[ i ].getAttribute( 'category' );
-		suggestion[ 'ruleid' ] = errors[ i ].getAttribute( 'ruleId' );
-		suggestion[ 'subid' ] = errors[ i ].getAttribute( 'subId' );
+		suggestion.offset = errorOffset;
+		suggestion.errorlength = errorLength;
+		suggestion.type = errors[ i ].getAttribute( 'category' );
+		suggestion.ruleid = errors[ i ].getAttribute( 'ruleId' );
+		suggestion.subid = errors[ i ].getAttribute( 'subId' );
 		url = errors[ i ].getAttribute( 'url' );
 
 		if ( url ) {
-			suggestion[ 'moreinfo' ] = url;
+			suggestion.moreinfo = url;
 		}
 
 		this.suggestions.push( suggestion );
 	}
 
 	return this.suggestions;
-}
+};
 
 // Wrapper code by James Padolsey
 // Source: http://james.padolsey.com/javascript/wordwrap-for-javascript/
 // License: 'This is free and unencumbered software released into the public domain.',
 // see http://james.padolsey.com/terms-conditions/
-mw.LanguageToolDialog.prototype._wordwrap = function( str, width, brk, cut ) {
+mw.LanguageToolDialog.prototype.wordwrap = function ( str, width, brk, cut ) {
 	var regex;
 
 	width = width || 75;
@@ -632,9 +631,9 @@ mw.LanguageToolDialog.prototype._wordwrap = function( str, width, brk, cut ) {
 		return str;
 	}
 
-	regex = '.{1,' + width + '}(\\s|$)' + ( cut ? '|.{' +width+ '}|.+$' : '|\\S+?(\\s|$)');
+	regex = '.{1,' + width + '}(\\s|$)' + ( cut ? '|.{' + width + '}|.+$' : '|\\S+?(\\s|$)' );
 
-	return str.match( new RegExp(regex, 'g') ).join( brk );
+	return str.match( new RegExp( regex, 'g' ) ).join( brk );
 };
 // End of wrapper code by James Padolsey
 
@@ -645,18 +644,19 @@ mw.LanguageToolDialog.prototype._wordwrap = function( str, width, brk, cut ) {
  */
 mw.LanguageToolDialog.prototype.highlightFragments = function () {
 	var i, j, rects, $result, top;
+	window.console.log( 'Not using: ', top ); // FIXME
 
 	this.$errors.empty();
 	for ( i = 0; i < this.fragments.length; i++ ) {
-		rects = this.surface.getView().getSelectionRects( this.fragments[i].getSelection() );
-		//console.log( this.fragments[i].getSelection() );
+		rects = this.surface.getView().getSelectionRects( this.fragments[ i ].getSelection() );
+		// console.log( this.fragments[i].getSelection() );
 		$result = $( '<div>' ).addClass( 've-ui-findAndReplaceDialog-findResult' );
 		for ( j = 0; j < rects.length; j++ ) {
 			$result.append( $( '<div>' ).css( {
-				top: rects[j].top,
-				left: rects[j].left,
-				width: rects[j].width,
-				height: rects[j].height
+				top: rects[ j ].top,
+				left: rects[ j ].left,
+				width: rects[ j ].width,
+				height: rects[ j ].height
 			} ) );
 		}
 		this.$errors.append( $result );
@@ -665,19 +665,19 @@ mw.LanguageToolDialog.prototype.highlightFragments = function () {
 };
 
 mw.LanguageToolDialog.prototype.displayInformation = function () {
-	var surfaceModel = this.surface.getModel();
-	var selection = surfaceModel.getSelection();
-	var range = selection.getRange();
-	console.log( range.start );
-	console.log( range.end );
+	var i, suggestion, error,
+		surfaceModel = this.surface.getModel(),
+		selection = surfaceModel.getSelection(),
+		range = selection.getRange();
+	window.console.log( range.start ); // FIXME
+	window.console.log( range.end ); // FIXME
 
-	for ( var i = 0; i < this.fragments.length; i++ ) {
-		if ( this.ranges[i].start <= range.start && range.end <= this.ranges[i].end )
-		{
-			console.log( surfaceModel.getLinearFragment( this.ranges[i], true ) );
-			var suggestion = this.suggestions[ this.suggestionMapper[i] ].suggestions;
-			var error = this.suggestions[ this.suggestionMapper[i] ].description;
-			console.log( error );
+	for ( i = 0; i < this.fragments.length; i++ ) {
+		if ( this.ranges[ i ].start <= range.start && range.end <= this.ranges[ i ].end ) {
+			window.console.log( surfaceModel.getLinearFragment( this.ranges[ i ], true ) ); // FIXME
+			suggestion = this.suggestions[ this.suggestionMapper[ i ] ].suggestions;
+			error = this.suggestions[ this.suggestionMapper[ i ] ].description;
+			window.console.log( error ); // FIXME
 			this.findText.setValue( error );
 			this.replaceText.setValue( suggestion );
 		}
@@ -690,7 +690,7 @@ mw.LanguageToolDialog.prototype.displayInformation = function () {
  */
 mw.LanguageToolDialog.prototype.getActionProcess = function ( action ) {
 	if ( action === 'findNext' || action === 'findPrevious' ) {
-		return new OO.ui.Process( this[action], this );
+		return new OO.ui.Process( this[ action ], this );
 	}
 	return mw.LanguageToolDialog.super.prototype.getActionProcess.call( this, action );
 };
