@@ -1,4 +1,4 @@
-/*jshint node:true */
+/*jshint node:true, strict:false */
 module.exports = function ( grunt ) {
 	grunt.loadNpmTasks( 'grunt-contrib-jshint' );
 	grunt.loadNpmTasks( 'grunt-jscs' );

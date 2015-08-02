@@ -1,4 +1,6 @@
 ( function () {
+'use strict';
+
 /*!
  * VisualEditor UserInterface LanguageToolAction class.
  *

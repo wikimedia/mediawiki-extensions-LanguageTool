@@ -1,4 +1,6 @@
 ( function () {
+'use strict';
+
 /*!
  * VisualEditor extension LanguageToolDialog class.
  *

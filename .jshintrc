@@ -8,7 +8,8 @@
 	"nonew": true,
 	"undef": true,
 	"unused": true,
-	"strict": false,
+	"strict": true,
+	"curly": true,
 
 	// Relaxing
 	"es5": false,
