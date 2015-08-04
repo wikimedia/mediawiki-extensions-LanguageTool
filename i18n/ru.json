@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Okras"
+		]
+	},
+	"languagetool-desc": "Помогает редакторам исправлять орфографические и грамматические ошибки с помощью [https://languagetool.org/ LanguageTool]"
+}
