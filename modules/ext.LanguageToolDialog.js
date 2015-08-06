@@ -48,6 +48,7 @@ mw.LanguageToolDialog.static.maxRenderedResults = 100;
  * @inheritdoc
  */
 mw.LanguageToolDialog.prototype.initialize = function () {
+	mw.log( 'intialize' );
 	// Parent method
 	mw.LanguageToolDialog.super.prototype.initialize.call( this );
 
@@ -166,6 +167,7 @@ mw.LanguageToolDialog.prototype.initialize = function () {
  * @inheritdoc
  */
 mw.LanguageToolDialog.prototype.getSetupProcess = function ( data ) {
+	mw.log( 'getSetupProcess' );
 	data = data || {};
 	return mw.LanguageToolDialog.super.prototype.getSetupProcess.call( this, data )
 		.first( function () {
@@ -194,6 +196,7 @@ mw.LanguageToolDialog.prototype.getSetupProcess = function ( data ) {
  * @inheritdoc
  */
 mw.LanguageToolDialog.prototype.getReadyProcess = function ( data ) {
+	mw.log( 'getReadyProcess' );
 	return mw.LanguageToolDialog.super.prototype.getReadyProcess.call( this, data )
 		.next( function () {
 			this.findText.focus().select();
@@ -204,6 +207,7 @@ mw.LanguageToolDialog.prototype.getReadyProcess = function ( data ) {
  * @inheritdoc
  */
 mw.LanguageToolDialog.prototype.getTeardownProcess = function ( data ) {
+	mw.log( 'getTeardownProcess' );
 	return mw.LanguageToolDialog.super.prototype.getTeardownProcess.call( this, data )
 		.next( function () {
 			var selection,
@@ -241,6 +245,7 @@ mw.LanguageToolDialog.prototype.getTeardownProcess = function ( data ) {
  * Handle window scroll events
  */
 mw.LanguageToolDialog.prototype.onWindowScroll = function () {
+	mw.log( 'onWindowScroll' );
 	if ( this.renderedFragments.getLength() < this.results ) {
 		// If viewport clipping is being used, reposition results based on the current viewport
 		this.renderFragments();
@@ -251,6 +256,7 @@ mw.LanguageToolDialog.prototype.onWindowScroll = function () {
  * Handle change events to the find inputs (text or match case)
  */
 mw.LanguageToolDialog.prototype.onFindChange = function () {
+	mw.log( 'onFindChange' );
 	this.updateFragments();
 	this.renderFragments();
 	this.highlightFocused( true );
@@ -262,6 +268,7 @@ mw.LanguageToolDialog.prototype.onFindChange = function () {
  * @param {jQuery.Event} e
  */
 mw.LanguageToolDialog.prototype.onFindTextEnter = function ( e ) {
+	mw.log( 'onFindTextEnter' );
 	if ( !this.results ) {
 		return;
 	}
@@ -276,6 +283,7 @@ mw.LanguageToolDialog.prototype.onFindTextEnter = function ( e ) {
  * Update search result fragments
  */
 mw.LanguageToolDialog.prototype.updateFragments = function () {
+	mw.log( 'updateFragments' );
 	var i, l,
 		surfaceModel = this.surface.getModel(),
 		documentModel = surfaceModel.getDocument(),
@@ -304,6 +312,7 @@ mw.LanguageToolDialog.prototype.updateFragments = function () {
  * Position results markers
  */
 mw.LanguageToolDialog.prototype.renderFragments = function () {
+	mw.log( 'renderFragments' );
 	if ( this.replacing ) {
 		return;
 	}
@@ -342,6 +351,7 @@ mw.LanguageToolDialog.prototype.renderFragments = function () {
  * @param {ve.Range} range Range of fragments to render
  */
 mw.LanguageToolDialog.prototype.renderRangeOfFragments = function ( range ) {
+	mw.log( 'renderRangeOfFragments' );
 	var i, j, jlen, rects, $result, top;
 	this.$findResults.empty();
 	for ( i = range.start; i < range.end; i++ ) {
@@ -370,6 +380,7 @@ mw.LanguageToolDialog.prototype.renderRangeOfFragments = function ( range ) {
  * @param {boolean} scrollIntoView Scroll the marker into view
  */
 mw.LanguageToolDialog.prototype.highlightFocused = function ( scrollIntoView ) {
+	mw.log( 'highlightFocused' );
 	var $result, rect, top,
 		offset, windowScrollTop, windowScrollHeight,
 		surfaceView = this.surface.getView();
@@ -512,6 +523,9 @@ mw.LanguageToolDialog.prototype.send = function () {
 
 	// TODO: Get the language from VE's data model
 	lang = mw.config.get( 'wgPageContentLanguage' );
+	if ( lang === 'en' ) {
+		lang = 'en-US';
+	}
 
 	$.ajax( {
 		type: 'POST',
@@ -519,7 +533,7 @@ mw.LanguageToolDialog.prototype.send = function () {
 		url: 'http://tools.wmflabs.org/languageproofing/',
 		data: { language: lang, text: text }
 	} ).done( function ( responseXML ) {
-		// console.log( responseXML );
+		// mw.log( responseXML );
 		self.openDialog.apply( self, [ responseXML, mapper ] );
 	} );
 	return;
@@ -646,12 +660,12 @@ mw.LanguageToolDialog.prototype.wordwrap = function ( str, width, brk, cut ) {
  */
 mw.LanguageToolDialog.prototype.highlightFragments = function () {
 	var i, j, rects, $result, top;
-	window.console.log( 'Not using: ', top ); // FIXME
+	mw.log( 'Not using: ', top ); // FIXME
 
 	this.$errors.empty();
 	for ( i = 0; i < this.fragments.length; i++ ) {
 		rects = this.surface.getView().getSelectionRects( this.fragments[ i ].getSelection() );
-		// console.log( this.fragments[i].getSelection() );
+		// mw.log( this.fragments[i].getSelection() );
 		$result = $( '<div>' ).addClass( 've-ui-findAndReplaceDialog-findResult' );
 		for ( j = 0; j < rects.length; j++ ) {
 			$result.append( $( '<div>' ).css( {
@@ -671,15 +685,15 @@ mw.LanguageToolDialog.prototype.displayInformation = function () {
 		surfaceModel = this.surface.getModel(),
 		selection = surfaceModel.getSelection(),
 		range = selection.getRange();
-	window.console.log( range.start ); // FIXME
-	window.console.log( range.end ); // FIXME
+	mw.log( range.start ); // FIXME
+	mw.log( range.end ); // FIXME
 
 	for ( i = 0; i < this.fragments.length; i++ ) {
 		if ( this.ranges[ i ].start <= range.start && range.end <= this.ranges[ i ].end ) {
-			window.console.log( surfaceModel.getLinearFragment( this.ranges[ i ], true ) ); // FIXME
+			mw.log( surfaceModel.getLinearFragment( this.ranges[ i ], true ) ); // FIXME
 			suggestion = this.suggestions[ this.suggestionMapper[ i ] ].suggestions;
 			error = this.suggestions[ this.suggestionMapper[ i ] ].description;
-			window.console.log( error ); // FIXME
+			mw.log( error ); // FIXME
 			this.findText.setValue( error );
 			this.replaceText.setValue( suggestion );
 		}
