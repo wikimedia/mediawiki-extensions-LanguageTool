@@ -90,9 +90,6 @@ mw.LanguageToolDialog.prototype.initialize = function () {
 	this.replaceButton = new OO.ui.ButtonWidget( {
 		label: ve.msg( 'visualeditor-find-and-replace-replace-button' )
 	} );
-	this.replaceAllButton = new OO.ui.ButtonWidget( {
-		label: ve.msg( 'visualeditor-find-and-replace-replace-all-button' )
-	} );
 
 	var optionsGroup = new OO.ui.ButtonGroupWidget( {
 			classes: [ 've-ui-findAndReplaceDialog-cell' ],
@@ -110,8 +107,7 @@ mw.LanguageToolDialog.prototype.initialize = function () {
 		replaceGroup = new OO.ui.ButtonGroupWidget( {
 			classes: [ 've-ui-findAndReplaceDialog-cell' ],
 			items: [
-				this.replaceButton,
-				this.replaceAllButton
+				this.replaceButton
 			]
 		} ),
 		doneButton = new OO.ui.ButtonWidget( {
@@ -125,15 +121,10 @@ mw.LanguageToolDialog.prototype.initialize = function () {
 	this.onWindowScrollDebounced = ve.debounce( this.onWindowScroll.bind( this ), 250 );
 	this.updateFragmentsDebounced = ve.debounce( this.updateFragments.bind( this ) );
 	this.renderFragmentsDebounced = ve.debounce( this.renderFragments.bind( this ) );
-	this.findText.connect( this, {
-		change: 'onFindChange',
-		enter: 'onFindTextEnter'
-	} );
 	this.sendButton.connect( this, { click: 'send' } );
 	this.nextButton.connect( this, { click: 'findNext' } );
 	this.previousButton.connect( this, { click: 'findPrevious' } );
 	this.replaceButton.connect( this, { click: 'onReplaceButtonClick' } );
-	this.replaceAllButton.connect( this, { click: 'onReplaceAllButtonClick' } );
 	doneButton.connect( this, { click: 'close' } );
 
 	// Initialization
@@ -179,8 +170,6 @@ mw.LanguageToolDialog.prototype.getSetupProcess = function ( data ) {
 			text = fragment.getText();
 			if ( text && text !== this.findText.getValue() ) {
 				this.findText.setValue( text );
-			} else {
-				this.onFindChange();
 			}
 
 			this.initialFragment = fragment;
@@ -244,31 +233,6 @@ mw.LanguageToolDialog.prototype.onWindowScroll = function () {
 };
 
 /**
- * Handle change events to the find inputs (text or match case)
- */
-mw.LanguageToolDialog.prototype.onFindChange = function () {
-	this.updateFragments();
-	this.renderFragments();
-	this.highlightFocused( true );
-};
-
-/**
- * Handle enter events on the find text input
- *
- * @param {jQuery.Event} e
- */
-mw.LanguageToolDialog.prototype.onFindTextEnter = function ( e ) {
-	if ( !this.results ) {
-		return;
-	}
-	if ( e.shiftKey ) {
-		this.findPrevious();
-	} else {
-		this.findNext();
-	}
-};
-
-/**
  * Update search result fragments
  */
 mw.LanguageToolDialog.prototype.updateFragments = function () {
@@ -278,12 +242,13 @@ mw.LanguageToolDialog.prototype.updateFragments = function () {
 		ranges = [],
 		find = this.findText.getValue();
 
+	this.send();
 	this.query = find;
 	this.findText.setValidityFlag();
 
 	this.fragments = [];
 	if ( this.query ) {
-		ranges = documentModel.findText( this.query, /*matchCase,*/ true );
+		ranges = documentModel.findText( this.query, true );
 		for ( i = 0, l = ranges.length; i < l; i++ ) {
 			this.fragments.push( surfaceModel.getLinearFragment( ranges[ i ], true, true ) );
 		}
@@ -293,7 +258,6 @@ mw.LanguageToolDialog.prototype.updateFragments = function () {
 	this.nextButton.setDisabled( !this.results );
 	this.previousButton.setDisabled( !this.results );
 	this.replaceButton.setDisabled( !this.results );
-	this.replaceAllButton.setDisabled( !this.results );
 };
 
 /**
@@ -306,12 +270,12 @@ mw.LanguageToolDialog.prototype.renderFragments = function () {
 
 	var i, selection, viewportRange,
 		start = 0,
-		end = this.results;
+		end = this.errors.length;
 
 	// When there are a large number of results, calculate the viewport range for clipping
-	if ( this.results > 50 ) {
+	if ( this.errors > 50 ) {
 		viewportRange = this.surface.getView().getViewportRange();
-		for ( i = 0; i < this.results; i++ ) {
+		for ( i = 0; i < this.errors; i++ ) {
 			selection = this.fragments[ i ].getSelection();
 			if ( viewportRange && selection.getRange().start < viewportRange.start ) {
 				start = i + 1;
@@ -339,6 +303,8 @@ mw.LanguageToolDialog.prototype.renderFragments = function () {
  */
 mw.LanguageToolDialog.prototype.renderRangeOfFragments = function ( range ) {
 	var i, j, jlen, rects, $result, top;
+
+	this.$errors.empty();
 	for ( i = range.start; i < range.end; i++ ) {
 		rects = this.surface.getView().getSelectionRects( this.fragments[ i ].getSelection() );
 		$result = $( '<div>' ).addClass( 've-ui-findAndReplaceDialog-findResult' );
@@ -353,10 +319,11 @@ mw.LanguageToolDialog.prototype.renderRangeOfFragments = function ( range ) {
 			} ) );
 		}
 		$result.data( 'top', top );
-		this.$findResults.append( $result );
+		this.$errors.append( $result );
 	}
 	this.renderedFragments = range;
 	this.highlightFocused();
+	this.displayInformation();
 };
 
 /**
@@ -369,7 +336,7 @@ mw.LanguageToolDialog.prototype.highlightFocused = function ( scrollIntoView ) {
 		offset, windowScrollTop, windowScrollHeight,
 		surfaceView = this.surface.getView();
 
-	if ( this.results ) {
+	if ( this.errors ) {
 		this.findText.setLabel(
 			ve.msg( 'visualeditor-find-and-replace-results', this.focusedIndex + 1, this.results )
 		);
@@ -380,12 +347,12 @@ mw.LanguageToolDialog.prototype.highlightFocused = function ( scrollIntoView ) {
 		return;
 	}
 
-	this.$findResults
+	this.$errors
 		.find( '.ve-ui-findAndReplaceDialog-findResult-focused' )
 		.removeClass( 've-ui-findAndReplaceDialog-findResult-focused' );
 
 	if ( this.renderedFragments.containsOffset( this.focusedIndex ) ) {
-		$result = this.$findResults.children().eq( this.focusedIndex - this.renderedFragments.start )
+		$result = this.$errors.children().eq( this.focusedIndex - this.renderedFragments.start )
 			.addClass( 've-ui-findAndReplaceDialog-findResult-focused' );
 
 		top = $result.data( 'top' );
@@ -450,17 +417,6 @@ mw.LanguageToolDialog.prototype.onReplaceButtonClick = function () {
 	}
 	// We may have iterated off the end
 	this.focusedIndex = this.focusedIndex % this.results;
-};
-
-/**
- * Handle click events on the previous all button
- */
-mw.LanguageToolDialog.prototype.onReplaceAllButtonClick = function () {
-	var i, l;
-
-	for ( i = 0, l = this.results; i < l; i++ ) {
-		this.replace( i );
-	}
 };
 
 /**
@@ -569,7 +525,7 @@ mw.LanguageToolDialog.prototype.openDialog = function ( responseXML, mapper ) {
 			error.used = true;
 		}
 	}
-	this.highlightFragments();
+	this.renderFragments();
 };
 
 mw.LanguageToolDialog.prototype.processXML = function ( responseXML ) {
