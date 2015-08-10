@@ -217,6 +217,8 @@ mw.LanguageToolDialog.prototype.getTeardownProcess = function ( data ) {
 				// If the selection wasn't changed, focus anyway
 				surfaceView.focus();
 			}
+
+			this.$errors.empty().detach();
 			this.fragments = [];
 			this.surface = null;
 		}, this );
