@@ -226,7 +226,7 @@ mw.LanguageToolDialog.prototype.getTeardownProcess = function ( data ) {
  * Handle window scroll events
  */
 mw.LanguageToolDialog.prototype.onWindowScroll = function () {
-	if ( this.renderedFragments.getLength() < this.results ) {
+	if ( this.renderedFragments.getLength() < this.errors.length ) {
 		// If viewport clipping is being used, reposition results based on the current viewport
 		this.renderFragments();
 	}
@@ -336,9 +336,9 @@ mw.LanguageToolDialog.prototype.highlightFocused = function ( scrollIntoView ) {
 		offset, windowScrollTop, windowScrollHeight,
 		surfaceView = this.surface.getView();
 
-	if ( this.errors ) {
+	if ( this.errors.length ) {
 		this.findText.setLabel(
-			ve.msg( 'visualeditor-find-and-replace-results', this.focusedIndex + 1, this.results )
+			ve.msg( 'visualeditor-find-and-replace-results', this.focusedIndex + 1, this.errors.length )
 		);
 	} else {
 		this.findText.setLabel(
@@ -378,16 +378,18 @@ mw.LanguageToolDialog.prototype.highlightFocused = function ( scrollIntoView ) {
  * Find the next result
  */
 mw.LanguageToolDialog.prototype.findNext = function () {
-	this.focusedIndex = ( this.focusedIndex + 1 ) % this.results;
+	this.focusedIndex = ( this.focusedIndex + 1 ) % this.errors.length;
 	this.highlightFocused( true );
+	this.displayInformation();
 };
 
 /**
  * Find the previous result
  */
 mw.LanguageToolDialog.prototype.findPrevious = function () {
-	this.focusedIndex = ( this.focusedIndex + this.results - 1 ) % this.results;
+	this.focusedIndex = ( this.focusedIndex + this.errors.length - 1 ) % this.errors.length;
 	this.highlightFocused( true );
+	this.displayInformation();
 };
 
 /**
@@ -396,7 +398,7 @@ mw.LanguageToolDialog.prototype.findPrevious = function () {
 mw.LanguageToolDialog.prototype.onReplaceButtonClick = function () {
 	var end;
 
-	if ( !this.results ) {
+	if ( !this.errors.length ) {
 		return;
 	}
 
@@ -408,7 +410,7 @@ mw.LanguageToolDialog.prototype.onReplaceButtonClick = function () {
 	// updateFragmentsDebounced is triggered by insertContent, but call it immediately
 	// so we can find the next fragment to select.
 	this.updateFragments();
-	if ( !this.results ) {
+	if ( !this.errors.length ) {
 		this.focusedIndex = 0;
 		return;
 	}
@@ -416,7 +418,7 @@ mw.LanguageToolDialog.prototype.onReplaceButtonClick = function () {
 		this.focusedIndex++;
 	}
 	// We may have iterated off the end
-	this.focusedIndex = this.focusedIndex % this.results;
+	this.focusedIndex = this.focusedIndex % this.errors.length;
 };
 
 /**
@@ -425,7 +427,9 @@ mw.LanguageToolDialog.prototype.onReplaceButtonClick = function () {
  * @param {number} index Index to replace
  */
 mw.LanguageToolDialog.prototype.replace = function ( index ) {
-	var replace = this.replaceText.getValue();
+	var replaceArr, replace = this.replaceText.getValue();
+	replaceArr = replace.split( '#' );
+	replace = replaceArr[ 0 ];
 	this.fragments[ index ].insertContent( replace, true );
 };
 
@@ -587,46 +591,13 @@ mw.LanguageToolDialog.prototype.wordwrap = function ( str, width, brk, cut ) {
 };
 // End of wrapper code by James Padolsey
 
-/**
- * Render subset of search result fragments
- *
- * @param {ve.Range} range Range of fragments to render
- */
-mw.LanguageToolDialog.prototype.highlightFragments = function () {
-	var i, j, rects, $result, top;
-	mw.log( 'Not using: ', top ); // FIXME
-
-	this.$errors.empty();
-	for ( i = 0; i < this.fragments.length; i++ ) {
-		rects = this.surface.getView().getSelectionRects( this.fragments[ i ].getSelection() );
-		$result = $( '<div>' ).addClass( 've-ui-findAndReplaceDialog-findResult' );
-		for ( j = 0; j < rects.length; j++ ) {
-			$result.append( $( '<div>' ).css( {
-				top: rects[ j ].top,
-				left: rects[ j ].left,
-				width: rects[ j ].width,
-				height: rects[ j ].height
-			} ) );
-		}
-		this.$errors.append( $result );
-	}
-	this.displayInformation();
-};
-
 mw.LanguageToolDialog.prototype.displayInformation = function () {
-	var i, replacements, error,
-		surfaceModel = this.surface.getModel(),
-		selection = surfaceModel.getSelection(),
-		range = selection.getRange(),
-		length = this.fragments.length - 1;
-	for ( i = 0; i <= length; i++ ) {
-		if ( this.ranges[ i ].start <= range.start && range.end <= this.ranges[ i ].end ) {
-			replacements = this.errors[ i ].replacements;
-			error = this.errors[ i ].description;
-			this.findText.setValue( error );
-			this.replaceText.setValue( replacements );
-		}
-	}
+	var replacements, error;
+
+	error = this.errors[ this.focusedIndex ].description;
+	replacements = this.errors[ this.focusedIndex ].replacements;
+	this.findText.setValue( error );
+	this.replaceText.setValue( replacements );
 	return;
 };
 
