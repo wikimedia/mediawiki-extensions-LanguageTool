@@ -54,7 +54,6 @@ mw.LanguageToolDialog.prototype.initialize = function () {
 	// Properties
 	this.surface = null;
 	this.errors = [];
-	this.ranges = [];
 	this.$errors = $( '<div>' ).addClass( 've-ui-findAndReplaceDialog-findResults' );
 	this.initialFragment = null;
 	this.fragments = [];
@@ -238,23 +237,10 @@ mw.LanguageToolDialog.prototype.onWindowScroll = function () {
  * Update search result fragments
  */
 mw.LanguageToolDialog.prototype.updateFragments = function () {
-	var i, l,
-		surfaceModel = this.surface.getModel(),
-		documentModel = surfaceModel.getDocument(),
-		ranges = [],
-		find = this.findText.getValue();
-
-	this.send();
-	this.query = find;
 	this.findText.setValidityFlag();
 
-	this.fragments = [];
-	if ( this.query ) {
-		ranges = documentModel.findText( this.query, true );
-		for ( i = 0, l = ranges.length; i < l; i++ ) {
-			this.fragments.push( surfaceModel.getLinearFragment( ranges[ i ], true, true ) );
-		}
-	}
+	this.fragments.splice( this.focusedIndex, 1 );
+	this.errors.splice( this.focusedIndex, 1 );
 	this.results = this.fragments.length;
 	this.focusedIndex = Math.min( this.focusedIndex, this.results ? this.results - 1 : 0 );
 	this.nextButton.setDisabled( !this.results );
@@ -488,7 +474,6 @@ mw.LanguageToolDialog.prototype.openDialog = function ( responseXML, mapper ) {
 		errorIndex, error, spanStart, spanEnd,
 		range, fragment, ruleId, surfaceModel;
 
-	this.ranges = [];
 	this.fragments = [];
 
 	this.processXML( responseXML );
@@ -516,7 +501,6 @@ mw.LanguageToolDialog.prototype.openDialog = function ( responseXML, mapper ) {
 			fragment = surfaceModel.getLinearFragment( range, true, true );
 
 			ruleId = error.ruleId;
-			this.ranges.push( range );
 			this.fragments.push( fragment );
 
 			if ( ruleId.indexOf( 'SPELLER_RULE' ) >= 0 ||
