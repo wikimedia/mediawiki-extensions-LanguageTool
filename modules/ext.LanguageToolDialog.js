@@ -82,10 +82,36 @@ mw.LanguageToolDialog.prototype.initialize = function () {
 		iconTitle: ve.msg( 'visualeditor-find-and-replace-next-button' ) + ' ' +
 			ve.ui.triggerRegistry.getMessages( 'findNext' ).join( ', ' )
 	} );
-	this.replaceText = new OO.ui.TextInputWidget( {
-		placeholder: ve.msg( 'visualeditor-find-and-replace-replace-text' ),
-		readOnly: true
+
+	this.replaceText = new OO.ui.ComboBoxWidget( {
+		label: 'ComboBoxWidget',
+		input: { value: 'Option 123' },
+		menu: {
+			items: [
+				new OO.ui.MenuOptionWidget( {
+					data: 'Option 1',
+					label: 'Option 123'
+				} ),
+				new OO.ui.MenuOptionWidget( {
+					data: 'Option 2',
+					label: 'Option Two'
+				} ),
+				new OO.ui.MenuOptionWidget( {
+					data: 'Option 3',
+					label: 'Option Three'
+				} ),
+				new OO.ui.MenuOptionWidget( {
+					data: 'Option 4',
+					label: 'Option Four'
+				} ),
+				new OO.ui.MenuOptionWidget( {
+					data: 'Option 5',
+					label: 'Option Five'
+				} )
+			]
+		}
 	} );
+
 	this.replaceButton = new OO.ui.ButtonWidget( {
 		label: ve.msg( 'visualeditor-find-and-replace-replace-button' )
 	} );
@@ -128,19 +154,18 @@ mw.LanguageToolDialog.prototype.initialize = function () {
 
 	// Initialization
 	this.findText.$input.prop( 'tabIndex', 1 );
-	this.replaceText.$input.prop( 'tabIndex', 2 );
 	this.$content.addClass( 've-ui-findAndReplaceDialog-content' );
 	this.$body
 		.append(
 			$findRow.append(
-				$( '<div>' ).addClass( 've-ui-findAndReplaceDialog-cell ve-ui-findAndReplaceDialog-cell-input' ).append(
+				$( '<div>' ).addClass( 've-ui-findAndReplaceDialog-cell ve-ui-findAndReplaceDialog-cell-input-find' ).append(
 					this.findText.$element
 				),
 				navigateGroup.$element,
 				optionsGroup.$element
 			),
 			$replaceRow.append(
-				$( '<div>' ).addClass( 've-ui-findAndReplaceDialog-cell ve-ui-findAndReplaceDialog-cell-input' ).append(
+				$( '<div>' ).css( { height: '90px' } ).addClass( 've-ui-findAndReplaceDialog-cell ve-ui-findAndReplaceDialog-cell-input-replace' ).append(
 					this.replaceText.$element
 				),
 				replaceGroup.$element,
@@ -580,10 +605,17 @@ mw.LanguageToolDialog.prototype.wordwrap = function ( str, width, brk, cut ) {
 mw.LanguageToolDialog.prototype.displayInformation = function () {
 	var replacements, error;
 
-	error = this.errors[ this.focusedIndex ].description;
-	replacements = this.errors[ this.focusedIndex ].replacements;
-	this.findText.setValue( error );
-	this.replaceText.setValue( replacements );
+	if ( this.errors && this.errors.length > this.focusedIndex ) {
+		error = this.errors[ this.focusedIndex ].description;
+		replacements = this.errors[ this.focusedIndex ].replacements;
+	}
+
+	if ( error ) {
+		this.findText.setValue( error );
+	}
+	if ( replacements ) {
+		this.replaceText.setValue( replacements );
+	}
 	return;
 };
 

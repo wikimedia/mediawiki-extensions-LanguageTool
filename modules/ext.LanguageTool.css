@@ -26,11 +26,24 @@
 	padding-right: 0;
 }
 
-.ve-ui-findAndReplaceDialog-cell-input {
+.ve-ui-findAndReplaceDialog-cell-input-find {
 	width: 100%;
 }
 
-.ve-ui-findAndReplaceDialog-cell-input .oo-ui-textInputWidget {
+.ve-ui-findAndReplaceDialog-cell-input-find .oo-ui-textInputWidget {
+	max-width: none;
+}
+
+.ve-ui-findAndReplaceDialog-cell-input-replace {
+	width: 100%;
+}
+
+.ve-ui-findAndReplaceDialog-overlay {
+	width : 100%;
+	overflow: auto;
+}
+
+.ve-ui-findAndReplaceDialog-cell-input-replace .oo-ui-comboBoxWidget {
 	max-width: none;
 }
 
