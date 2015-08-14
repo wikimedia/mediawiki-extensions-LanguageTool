@@ -89,23 +89,23 @@ mw.LanguageToolDialog.prototype.initialize = function () {
 		menu: {
 			items: [
 				new OO.ui.MenuOptionWidget( {
-					data: 'Option 1',
+					data: '1',
 					label: 'Option 123'
 				} ),
 				new OO.ui.MenuOptionWidget( {
-					data: 'Option 2',
+					data: '2',
 					label: 'Option Two'
 				} ),
 				new OO.ui.MenuOptionWidget( {
-					data: 'Option 3',
+					data: '3',
 					label: 'Option Three'
 				} ),
 				new OO.ui.MenuOptionWidget( {
-					data: 'Option 4',
+					data: '4',
 					label: 'Option Four'
 				} ),
 				new OO.ui.MenuOptionWidget( {
-					data: 'Option 5',
+					data: '5',
 					label: 'Option Five'
 				} )
 			]
@@ -603,7 +603,7 @@ mw.LanguageToolDialog.prototype.wordwrap = function ( str, width, brk, cut ) {
 // End of wrapper code by James Padolsey
 
 mw.LanguageToolDialog.prototype.displayInformation = function () {
-	var replacements, error;
+	var i, replacements, error, replaceArr, len, index;
 
 	if ( this.errors && this.errors.length > this.focusedIndex ) {
 		error = this.errors[ this.focusedIndex ].description;
@@ -614,7 +614,12 @@ mw.LanguageToolDialog.prototype.displayInformation = function () {
 		this.findText.setValue( error );
 	}
 	if ( replacements ) {
-		this.replaceText.setValue( replacements );
+		replaceArr = replacements.split( '#' );
+		len = replaceArr.length;
+		for ( i = 0; i <= len; i++ ) {
+			index = i.toString();
+			this.replaceText.getMenu().getItemFromData( index ).setData( replaceArr[ i ] );
+		}
 	}
 	return;
 };
