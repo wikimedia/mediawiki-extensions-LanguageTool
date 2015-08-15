@@ -83,32 +83,13 @@ mw.LanguageToolDialog.prototype.initialize = function () {
 			ve.ui.triggerRegistry.getMessages( 'findNext' ).join( ', ' )
 	} );
 
+	this.items = [];
+
 	this.replaceText = new OO.ui.ComboBoxWidget( {
 		label: 'ComboBoxWidget',
-		input: { value: 'Option 123' },
+		input: { value: 'Suggestions' },
 		menu: {
-			items: [
-				new OO.ui.MenuOptionWidget( {
-					data: '1',
-					label: 'Option 123'
-				} ),
-				new OO.ui.MenuOptionWidget( {
-					data: '2',
-					label: 'Option Two'
-				} ),
-				new OO.ui.MenuOptionWidget( {
-					data: '3',
-					label: 'Option Three'
-				} ),
-				new OO.ui.MenuOptionWidget( {
-					data: '4',
-					label: 'Option Four'
-				} ),
-				new OO.ui.MenuOptionWidget( {
-					data: '5',
-					label: 'Option Five'
-				} )
-			]
+			items: this.items
 		}
 	} );
 
@@ -336,7 +317,6 @@ mw.LanguageToolDialog.prototype.renderRangeOfFragments = function ( range ) {
 	}
 	this.renderedFragments = range;
 	this.highlightFocused();
-	this.displayInformation();
 };
 
 /**
@@ -385,6 +365,7 @@ mw.LanguageToolDialog.prototype.highlightFocused = function ( scrollIntoView ) {
 			$( 'body, html' ).animate( { scrollTop: offset - ( windowScrollHeight / 2  ) }, 'fast' );
 		}
 	}
+	this.displayInformation();
 };
 
 /**
@@ -393,7 +374,6 @@ mw.LanguageToolDialog.prototype.highlightFocused = function ( scrollIntoView ) {
 mw.LanguageToolDialog.prototype.findNext = function () {
 	this.focusedIndex = ( this.focusedIndex + 1 ) % this.errors.length;
 	this.highlightFocused( true );
-	this.displayInformation();
 };
 
 /**
@@ -402,7 +382,6 @@ mw.LanguageToolDialog.prototype.findNext = function () {
 mw.LanguageToolDialog.prototype.findPrevious = function () {
 	this.focusedIndex = ( this.focusedIndex + this.errors.length - 1 ) % this.errors.length;
 	this.highlightFocused( true );
-	this.displayInformation();
 };
 
 /**
@@ -603,7 +582,7 @@ mw.LanguageToolDialog.prototype.wordwrap = function ( str, width, brk, cut ) {
 // End of wrapper code by James Padolsey
 
 mw.LanguageToolDialog.prototype.displayInformation = function () {
-	var i, replacements, error, replaceArr, len, index;
+	var i, index, replacements, error, replaceArr, len;
 
 	if ( this.errors && this.errors.length > this.focusedIndex ) {
 		error = this.errors[ this.focusedIndex ].description;
@@ -613,13 +592,24 @@ mw.LanguageToolDialog.prototype.displayInformation = function () {
 	if ( error ) {
 		this.findText.setValue( error );
 	}
-	if ( replacements ) {
+	if ( replacements.length ) {
 		replaceArr = replacements.split( '#' );
 		len = replaceArr.length;
+		this.replaceText.getMenu().removeItems( this.items );
+		this.items = [];
 		for ( i = 0; i <= len; i++ ) {
 			index = i.toString();
-			this.replaceText.getMenu().getItemFromData( index ).setData( replaceArr[ i ] );
+			this.items.push(
+				new OO.ui.MenuOptionWidget( {
+					data: replaceArr[i],
+					label: replaceArr[i]
+				} )
+			);
 		}
+		this.replaceText.getMenu().addItems( this.items );
+	} else {
+		this.replaceText.getMenu().removeItems( this.items );
+		this.items = [];
 	}
 	return;
 };
