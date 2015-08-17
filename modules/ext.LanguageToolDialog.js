@@ -419,9 +419,9 @@ mw.LanguageToolDialog.prototype.onReplaceButtonClick = function () {
  * @param {number} index Index to replace
  */
 mw.LanguageToolDialog.prototype.replace = function ( index ) {
-	var replaceArr, replace = this.replaceText.getValue();
-	replaceArr = replace.split( '#' );
-	replace = replaceArr[ 0 ];
+	var replace;
+
+	replace = this.replaceText.getInput().getValue();
 	this.fragments[ index ].insertContent( replace, true );
 };
 
