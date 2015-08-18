@@ -153,6 +153,7 @@ mw.LanguageToolDialog.prototype.initialize = function () {
 				doneButton.$element
 			)
 		);
+	this.send();
 };
 
 /**
