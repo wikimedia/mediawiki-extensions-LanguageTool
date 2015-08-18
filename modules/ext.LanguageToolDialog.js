@@ -58,10 +58,10 @@ mw.LanguageToolDialog.prototype.initialize = function () {
 	this.initialFragment = null;
 	this.fragments = [];
 	this.results = 0;
+	this.replaceFlag = false;
 	// Range over the list of fragments indicating which ones where rendered,
 	// e.g. [1,3] means fragments 1 & 2 were rendered
 	this.renderedFragments = null;
-	this.replacing = false;
 	this.focusedIndex = 0;
 	this.query = null;
 	this.findText = new OO.ui.TextInputWidget( {
@@ -250,7 +250,7 @@ mw.LanguageToolDialog.prototype.getTeardownProcess = function ( data ) {
  * Handle window scroll events
  */
 mw.LanguageToolDialog.prototype.onWindowScroll = function () {
-	if ( this.renderedFragments.getLength() < this.errors.length ) {
+	if ( this.renderedFragments.getLength() < this.errors.length || this.renderedFragments === null ) {
 		// If viewport clipping is being used, reposition results based on the current viewport
 		this.renderFragments();
 	}
@@ -260,25 +260,27 @@ mw.LanguageToolDialog.prototype.onWindowScroll = function () {
  * Update search result fragments
  */
 mw.LanguageToolDialog.prototype.updateFragments = function () {
+	if ( !this.replaceFlag ) {
+		return;
+	}
+
 	this.findText.setValidityFlag();
 
 	this.fragments.splice( this.focusedIndex, 1 );
 	this.errors.splice( this.focusedIndex, 1 );
+
 	this.results = this.fragments.length;
 	this.focusedIndex = Math.min( this.focusedIndex, this.results ? this.results - 1 : 0 );
 	this.nextButton.setDisabled( !this.results );
 	this.previousButton.setDisabled( !this.results );
 	this.replaceButton.setDisabled( !this.results );
+	this.replaceFlag = false;
 };
 
 /**
  * Position results markers
  */
 mw.LanguageToolDialog.prototype.renderFragments = function () {
-	if ( this.replacing ) {
-		return;
-	}
-
 	var i, selection, viewportRange,
 		start = 0,
 		end = this.errors.length;
@@ -390,6 +392,7 @@ mw.LanguageToolDialog.prototype.highlightFocused = function ( scrollIntoView ) {
  */
 mw.LanguageToolDialog.prototype.findNext = function () {
 	this.focusedIndex = ( this.focusedIndex + 1 ) % this.errors.length;
+	this.replaceText.getInput().setValue( '' );
 	this.highlightFocused( true );
 };
 
@@ -398,6 +401,7 @@ mw.LanguageToolDialog.prototype.findNext = function () {
  */
 mw.LanguageToolDialog.prototype.findPrevious = function () {
 	this.focusedIndex = ( this.focusedIndex + this.errors.length - 1 ) % this.errors.length;
+	this.replaceText.getInput().setValue( '' );
 	this.highlightFocused( true );
 };
 
@@ -418,6 +422,8 @@ mw.LanguageToolDialog.prototype.onReplaceButtonClick = function () {
 	end = this.fragments[ this.focusedIndex ].getSelection().getRange().end;
 	// updateFragmentsDebounced is triggered by insertContent, but call it immediately
 	// so we can find the next fragment to select.
+	this.replaceFlag = true;
+
 	this.updateFragments();
 	if ( !this.errors.length ) {
 		this.focusedIndex = 0;
@@ -599,10 +605,11 @@ mw.LanguageToolDialog.prototype.wordwrap = function ( str, width, brk, cut ) {
 // End of wrapper code by James Padolsey
 
 mw.LanguageToolDialog.prototype.displayInformation = function () {
-	var i, index, replacements, error, replaceArr, len;
+	var i, index, replacements, error, replaceArr, len, desc;
 
 	if ( this.errors && this.errors.length > this.focusedIndex ) {
-		error = this.errors[ this.focusedIndex ].description;
+		desc = this.errors[ this.focusedIndex ].description.split( '<br/>' );
+		error = desc.join( '' );
 		replacements = this.errors[ this.focusedIndex ].replacements;
 	}
 
@@ -624,9 +631,11 @@ mw.LanguageToolDialog.prototype.displayInformation = function () {
 			);
 		}
 		this.replaceText.getMenu().addItems( this.items );
+		this.replaceText.getInput().setValue( replaceArr[0] );
 	} else {
 		this.replaceText.getMenu().removeItems( this.items );
 		this.items = [];
+		this.replaceText.getInput().setValue( '' );
 	}
 	return;
 };
