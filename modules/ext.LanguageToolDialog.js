@@ -171,6 +171,7 @@ mw.LanguageToolDialog.prototype.getSetupProcess = function ( data ) {
 			this.surface.getModel().connect( this, { documentUpdate: this.updateFragmentsDebounced } );
 			this.surface.getView().connect( this, { position: this.renderFragmentsDebounced } );
 			this.surface.getView().$window.on( 'scroll', this.onWindowScrollDebounced );
+			this.surface.getModel().on( 'select', this.onSelect.bind( this ) );
 
 			text = fragment.getText();
 			if ( text && text !== this.findText.getValue() ) {
@@ -179,6 +180,21 @@ mw.LanguageToolDialog.prototype.getSetupProcess = function ( data ) {
 
 			this.initialFragment = fragment;
 		}, this );
+};
+
+mw.LanguageToolDialog.prototype.onSelect = function ( e ) {
+	var i, r, range;
+
+	if ( !e.isNull() ) {
+		range = e.getRange();
+		for ( i = 0; i < this.fragments.length; i++ ) {
+			r = this.fragments[ i ].getSelection().getRange();
+			if ( r.start <= range.start && r.end >= range.end ) {
+				this.focusedIndex = i;
+				this.highlightFocused();
+			}
+		}
+	}
 };
 
 /**
