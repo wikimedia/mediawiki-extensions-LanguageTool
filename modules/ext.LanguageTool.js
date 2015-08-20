@@ -15,7 +15,7 @@
 	mw.languageTool.static.name = 'LanguageTool';
 	mw.languageTool.static.group = 'object';
 	mw.languageTool.static.icon = 'picture';
-	mw.languageTool.static.title = 'LanguageTool';
+	mw.languageTool.static.title = mw.msg( 'languagetool-toolbar-item-title' );
 	mw.languageTool.static.commandName = 'languageTool';
 	ve.ui.toolFactory.register( mw.languageTool );
 }() );

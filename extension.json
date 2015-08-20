@@ -23,6 +23,9 @@
 				"ext.LanguageToolCommand.js",
 				"ext.LanguageToolDialog.js"
 			],
+			"messages": [
+				"languagetool-toolbar-item-title"
+			],
 			"styles": [
 				"ext.LanguageTool.css"
 			],

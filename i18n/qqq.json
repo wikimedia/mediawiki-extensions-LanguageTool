@@ -7,5 +7,6 @@
 			"Amire80"
 		]
 	},
-	"languagetool-desc": "{{desc|name=LanguageTool|url=https://www.mediawiki.org/wiki/Extension:LanguageTool}}\n\nNote: \"LanguageTool\" is the name of the server software that does the error checking, and also the name of the MediaWiki extension that connects VisualEditor to that software."
+	"languagetool-desc": "{{desc|name=LanguageTool|url=https://www.mediawiki.org/wiki/Extension:LanguageTool}}\n\nNote: \"LanguageTool\" is the name of the server software that does the error checking, and also the name of the MediaWiki extension that connects VisualEditor to that software.",
+	"languagetool-toolbar-item-title": "The title of the toolbar element that starts spelling and grammar checking."
 }
