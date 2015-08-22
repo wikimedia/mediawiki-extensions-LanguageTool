@@ -4,5 +4,6 @@
 			"Bjankuloski06"
 		]
 	},
-	"languagetool-desc": "Помогнете им на уредниците да ги поправат правописните и граматичките грешки користејќи го [https://languagetool.org/ LanguageTool]"
+	"languagetool-desc": "Помогнете им на уредниците да ги поправат правописните и граматичките грешки користејќи го [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Провери правопис и граматика"
 }

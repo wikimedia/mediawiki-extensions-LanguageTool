@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Windes"
+			"Windes",
+			"Wladek92"
 		]
 	},
-	"languagetool-desc": "Permet aux éditeurs de corriger l'orthographe et la grammaire à l'aide de [https://languagetool.org/ LanguageTool]"
+	"languagetool-desc": "Permet aux éditeurs de corriger l'orthographe et la grammaire à l'aide de [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Vérifiez l'orthographe et la grammaire"
 }

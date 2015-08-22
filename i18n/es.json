@@ -4,5 +4,6 @@
 			"Macofe"
 		]
 	},
-	"languagetool-desc": "Ayuda a los editores a corregir los errores de ortografía y gramática a través de [https://languagetool.org/ LanguageTool]"
+	"languagetool-desc": "Ayuda a los editores a corregir los errores de ortografía y gramática a través de [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Comprobar la ortografía y la gramática"
 }
