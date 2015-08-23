@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"F3RaN"
+			"F3RaN",
+			"Toniher"
 		]
 	},
-	"languagetool-desc": "Ajuda als editors a corregir errors ortogràfics i gramaticals utilitzant [https://languagetool.org/ LanguageTool]"
+	"languagetool-desc": "Ajuda als editors a corregir errors ortogràfics i gramaticals utilitzant [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Comprova l'ortografia i la gramàtica"
 }

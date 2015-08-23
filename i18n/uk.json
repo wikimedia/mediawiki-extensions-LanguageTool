@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Ата"
+			"Ата",
+			"Dars"
 		]
 	},
-	"languagetool-desc": "Допомагає редакторам виправляти орфографічні та граматичні помилки з допомогою [https://languagetool.org/ LanguageTool]"
+	"languagetool-desc": "Допомагає редакторам виправляти орфографічні та граматичні помилки з допомогою [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Перевірка орфографії і граматики"
 }
