@@ -4,5 +4,6 @@
 			"Chrumps"
 		]
 	},
-	"languagetool-desc": "Pomaga redaktorom poprawiać pisownię i błędy gramatyczne wykorzystując [https://languagetool.org/ LanguageTool]"
+	"languagetool-desc": "Pomaga redaktorom poprawiać pisownię i błędy gramatyczne wykorzystując [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Sprawdzanie pisowni i gramatyki"
 }
