@@ -4,5 +4,6 @@
 			"Xuacu"
 		]
 	},
-	"languagetool-desc": "Ayuda a los editores a iguar los errores ortográficos y gramaticales usando [https://languagetool.org/ LanguageTool]"
+	"languagetool-desc": "Ayuda a los editores a iguar los errores ortográficos y gramaticales usando [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Comprobar la ortografía y gramática"
 }

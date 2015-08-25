@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Elisardojm"
+			"Elisardojm",
+			"Toliño"
 		]
 	},
-	"languagetool-desc": "Axuda ós editores a corrixir os erros de ortografía e gramática a través de [https://languagetool.org/ LanguageTool]"
+	"languagetool-desc": "Axuda aos editores a corrixir os erros de ortografía e gramática a través de [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Comprobar a ortografía e a gramática"
 }
