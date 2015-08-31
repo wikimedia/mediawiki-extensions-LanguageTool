@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Okras"
+			"Okras",
+			"Ghiutun"
 		]
 	},
-	"languagetool-desc": "Помогает редакторам исправлять орфографические и грамматические ошибки с помощью [https://languagetool.org/ LanguageTool]"
+	"languagetool-desc": "Помогает редакторам исправлять орфографические и грамматические ошибки с помощью [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Проверка орфографии и грамматики"
 }
