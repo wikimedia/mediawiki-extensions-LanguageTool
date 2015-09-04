@@ -4,5 +4,6 @@
 			"Otokoume"
 		]
 	},
+	"languagetool-desc": "編集者につづりや文法の間違いの発見を[https://languagetool.org/ LanguageTool]で支援します",
 	"languagetool-toolbar-item-title": "つづりと文法を確認する"
 }
