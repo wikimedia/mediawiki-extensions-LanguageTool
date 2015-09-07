@@ -19,7 +19,6 @@
 		"ext.LanguageTool": {
 			"scripts": [
 				"ext.LanguageTool.js",
-				"ext.LanguageToolAction.js",
 				"ext.LanguageToolCommand.js",
 				"ext.LanguageToolDialog.js"
 			],
