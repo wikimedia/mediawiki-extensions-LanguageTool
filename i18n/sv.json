@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Lokal Profil"
+			"Lokal Profil",
+			"Josve05a"
 		]
 	},
-	"languagetool-desc": "Hjälp skribenter korrigera stavning och gramatiska misstag med hjälp av [https://languagetool.org/ LanguageTool]"
+	"languagetool-desc": "Hjälp skribenter korrigera stavning och gramatiska misstag med hjälp av [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Kontrollera stavning och grammatik"
 }
