@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"TheEduGobi"
+		]
+	},
+	"languagetool-desc": "Ajuda editores a corrigirem erros de ortografia e gramática usando o [https://languagetool.org/pt/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Verificar ortografia e gramática"
+}
