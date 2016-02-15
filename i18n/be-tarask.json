@@ -4,5 +4,6 @@
 			"Red Winged Duck"
 		]
 	},
-	"languagetool-desc": "Дапамагае рэдактарам выпраўляць артаграфічныя і граматычныя памылкі з дапамогай [https://languagetool.org/ LanguageTool]"
+	"languagetool-desc": "Дапамагае рэдактарам выпраўляць артаграфічныя і граматычныя памылкі з дапамогай [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Праверка артаграфіі і граматыкі"
 }
