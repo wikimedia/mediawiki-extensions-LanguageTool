@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Beeyan"
+		]
+	},
+	"languagetool-desc": "Bantu editor mengecek kesalahan lafal dan tata bahasa mempergunakan [https://languagetool.org/ Perkakas Bahasa]",
+	"languagetool-toolbar-item-title": "Cek lafal dan tata bahasa"
+}
