@@ -1,9 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Revi"
+			"Revi",
+			"Ykhwong"
 		]
 	},
-	"languagetool-desc": "[https://languagetool.org LanguageTool]을 사용해 오타 및 문법 교정을 도움",
+	"languagetool-desc": "[https://languagetool.org LanguageTool]을 사용해 편집자들의 맞춤법 및 문법 교정을 도와줍니다",
 	"languagetool-toolbar-item-title": "철자 및 문법 검사"
 }
