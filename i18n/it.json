@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Selven"
+		]
+	},
+	"languagetool-desc": "Aiuta gli editori a correggere l'ortografia e gli errori di grammatica con [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Controlla l'ortografia e la grammatica"
+}
