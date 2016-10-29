@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hamilton Abreu"
+		]
+	},
+	"languagetool-desc": "Auxilia os editores a corrigir erros gramáticos e ortográficos usando [https://languagetool.org/ LanguageTool].",
+	"languagetool-toolbar-item-title": "Verificar ortografia e gramática"
+}
