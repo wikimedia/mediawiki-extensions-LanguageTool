@@ -85,8 +85,8 @@ mw.LanguageToolDialog.prototype.initialize = function () {
 
 	this.items = [];
 
-	this.replaceText = new OO.ui.ComboBoxWidget( {
-		label: 'ComboBoxWidget',
+	this.replaceText = new OO.ui.ComboBoxInputWidget( {
+		label: 'ComboBoxInputWidget',
 		input: { value: 'Suggestions' },
 		menu: {
 			items: this.items
