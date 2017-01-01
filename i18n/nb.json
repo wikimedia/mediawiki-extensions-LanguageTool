@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Jon Harald Søby"
+		]
+	},
+	"languagetool-desc": "Hjelper skribenter med å rette staving og grammatikkfeil med hjelp av [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Sjekk staving og grammatikk"
+}
