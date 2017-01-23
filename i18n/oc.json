@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Cedric31"
+		]
+	},
+	"languagetool-desc": "Permet als editors de corregir l'ortografia e la gramatica amb l'ajuda de [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Verificar l'ortografia e la gramatica"
+}
