@@ -97,6 +97,7 @@ mw.LanguageToolDialog.prototype.initialize = function () {
 		label: ve.msg( 'visualeditor-find-and-replace-replace-button' )
 	} );
 
+	// jscs:disable requireVarDeclFirst
 	var optionsGroup = new OO.ui.ButtonGroupWidget( {
 			classes: [ 've-ui-findAndReplaceDialog-cell' ],
 			items: [
@@ -493,7 +494,7 @@ mw.LanguageToolDialog.prototype.send = function () {
 	} ).done( function ( responseXML ) {
 		self.openDialog.apply( self, [ responseXML, mapper ] );
 	} );
-	return;
+	return null;
 };
 
 mw.LanguageToolDialog.prototype.openDialog = function ( responseXML, mapper ) {
