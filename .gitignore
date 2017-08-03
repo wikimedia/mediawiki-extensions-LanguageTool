@@ -3,6 +3,4 @@
 *.kate-swp
 .*.swp
 .idea
-composer.lock
-vendor/
 node_modules/
