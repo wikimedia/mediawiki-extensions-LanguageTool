@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Cwlin0416"
+			"Cwlin0416",
+			"Kly"
 		]
 	},
-	"languagetool-desc": "使用 [https://languagetool.org/ LanguageTool] 協助編輯器修正拼音與文法錯誤"
+	"languagetool-desc": "使用 [https://languagetool.org/ LanguageTool] 協助編輯器修正拼音與文法錯誤",
+	"languagetool-toolbar-item-title": "檢查拼寫與文法"
 }
