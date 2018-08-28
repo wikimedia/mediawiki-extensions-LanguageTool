@@ -1,6 +1,8 @@
-.svn
-*~
 *.kate-swp
+*~
 .*.swp
 .idea
+.svn
+composer.lock
 node_modules/
+vendor/
