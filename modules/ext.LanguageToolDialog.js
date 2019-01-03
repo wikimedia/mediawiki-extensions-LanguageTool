@@ -70,16 +70,24 @@ mw.LanguageToolDialog.prototype.initialize = function () {
 	} );
 	this.sendButton = new OO.ui.ButtonWidget( {
 		icon: 'check',
-		iconTitle: 'LanguageTool'
+		label: 'LanguageTool',
+		invisibleLabel: true,
+		title: 'LanguageTool'
 	} );
 	this.previousButton = new OO.ui.ButtonWidget( {
 		icon: 'previous',
-		iconTitle: ve.msg( 'visualeditor-find-and-replace-previous-button' ) + ' ' +
+		label: ve.msg( 'visualeditor-find-and-replace-previous-button' ) + ' ' +
+			ve.ui.triggerRegistry.getMessages( 'findPrevious' ).join( ', ' ),
+		invisibleLabel: true,
+		title: ve.msg( 'visualeditor-find-and-replace-previous-button' ) + ' ' +
 			ve.ui.triggerRegistry.getMessages( 'findPrevious' ).join( ', ' )
 	} );
 	this.nextButton = new OO.ui.ButtonWidget( {
 		icon: 'next',
-		iconTitle: ve.msg( 'visualeditor-find-and-replace-next-button' ) + ' ' +
+		label: ve.msg( 'visualeditor-find-and-replace-next-button' ) + ' ' +
+			ve.ui.triggerRegistry.getMessages( 'findNext' ).join( ', ' ),
+		invisibleLabel: true,
+		title: ve.msg( 'visualeditor-find-and-replace-next-button' ) + ' ' +
 			ve.ui.triggerRegistry.getMessages( 'findNext' ).join( ', ' )
 	} );
 
