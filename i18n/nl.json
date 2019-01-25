@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Mainframe98"
+		]
+	},
+	"languagetool-desc": "Helpt bewerkers spellings- en grammaticafouten te corrigeren met behulp van [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Spelling en grammatica controleren"
+}
