@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Mirin"
+		]
+	},
+	"languagetool-desc": "Helpas korekti ortografiajn kaj gramatikajn erarojn per [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Kontroli ortografion kaj gramatikon"
+}
