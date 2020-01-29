@@ -1,6 +1,6 @@
 {
 	"require-dev": {
-		"mediawiki/minus-x": "0.3.2"
+		"mediawiki/minus-x": "1.0.0"
 	},
 	"scripts": {
 		"test": [
