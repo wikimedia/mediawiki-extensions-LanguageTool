@@ -460,7 +460,7 @@
 	 * Send text to LanguageTool server
 	 *
 	 * @method
-	 * @return {NULL} Action was executed
+	 * @return {null} Action was executed
 	 */
 	mw.LanguageToolDialog.prototype.send = function () {
 		var model, data, mapper, i, textArray, text, lang,

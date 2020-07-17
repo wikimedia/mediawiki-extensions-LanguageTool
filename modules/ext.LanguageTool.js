@@ -2,6 +2,8 @@
 	'use strict';
 
 	/**
+	 * @param toolGroup
+	 * @param config
 	 * @class mw.languageTool
 	 * @singleton
 	 */
