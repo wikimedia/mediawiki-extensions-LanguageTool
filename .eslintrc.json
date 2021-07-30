@@ -13,7 +13,6 @@
 		"no-jquery/no-global-selector": "warn",
 		"no-useless-call": "warn",
 		"valid-jsdoc": "off",
-		"vars-on-top": "off",
 		"new-cap": "off"
 	}
 }
