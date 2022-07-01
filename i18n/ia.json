@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"McDutchie"
+		]
+	},
+	"languagetool-desc": "Adjuta redactores a corriger errores de orthographia e grammatica usante [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Verificar orthographia e grammatica"
+}
