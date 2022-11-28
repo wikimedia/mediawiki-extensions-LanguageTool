@@ -4,5 +4,6 @@
 			"Amire80"
 		]
 	},
-	"languagetool-desc": "עוזרת לעורכים לתקן שגיאות באיות ובדקדוק באמצעות [https://languagetool.org/ LanguageTool]"
+	"languagetool-desc": "עוזרת לעורכים לתקן שגיאות באיות ובדקדוק באמצעות [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "בדיקת איות ודקדוק"
 }
