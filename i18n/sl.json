@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Eleassar"
+		]
+	},
+	"languagetool-desc": "Urejevalcem z orodjem [https://languagetool.org/ LanguageTool] pomaga pri popravljanju napak črkovanja in slovnice",
+	"languagetool-toolbar-item-title": "Preveri črkovanje in slovnico"
+}
