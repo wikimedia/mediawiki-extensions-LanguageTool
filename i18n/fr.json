@@ -1,10 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
+			"Verdy p",
 			"Windes",
 			"Wladek92"
 		]
 	},
-	"languagetool-desc": "Permet aux éditeurs de corriger l'orthographe et la grammaire à l'aide de [https://languagetool.org/ LanguageTool]",
-	"languagetool-toolbar-item-title": "Vérifiez l'orthographe et la grammaire"
+	"languagetool-desc": "Aide les rédacteurs à corriger les fautes d’orthographe et de grammaire à l’aide de [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Vérifier l’orthographe et la grammaire"
 }
