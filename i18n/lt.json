@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Nokeoo"
+		]
+	},
+	"languagetool-desc": "Padeda redaktoriams ištaisyti rašybos ir gramatikos klaidas, naudojant [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Tikrinti rašybą ir gramatiką"
+}
