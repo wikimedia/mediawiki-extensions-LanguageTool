@@ -105,7 +105,7 @@
 			label: ve.msg( 'visualeditor-find-and-replace-replace-button' )
 		} );
 
-		var optionsGroup = new OO.ui.ButtonGroupWidget( {
+		const optionsGroup = new OO.ui.ButtonGroupWidget( {
 				classes: [ 've-ui-findAndReplaceDialog-cell' ],
 				items: [
 					this.sendButton
@@ -170,7 +170,7 @@
 		data = data || {};
 		return mw.LanguageToolDialog.super.prototype.getSetupProcess.call( this, data )
 			.first( function () {
-				var text, fragment = data.fragment;
+				let text, fragment = data.fragment;
 
 				this.surface = data.surface;
 				this.surface.$selections.append( this.$errors );
@@ -192,7 +192,7 @@
 	};
 
 	mw.LanguageToolDialog.prototype.onSelect = function ( e ) {
-		var i, r, range;
+		let i, r, range;
 
 		if ( !e.isNull() ) {
 			range = e.getRange();
@@ -222,7 +222,7 @@
 	mw.LanguageToolDialog.prototype.getTeardownProcess = function ( data ) {
 		return mw.LanguageToolDialog.super.prototype.getTeardownProcess.call( this, data )
 			.next( function () {
-				var selection,
+				let selection,
 					surfaceView = this.surface.getView(),
 					surfaceModel = this.surface.getModel();
 
@@ -289,7 +289,7 @@
 	 * Position results markers
 	 */
 	mw.LanguageToolDialog.prototype.renderFragments = function () {
-		var i, selection, viewportRange,
+		let i, selection, viewportRange,
 			start = 0,
 			end = this.errors.length;
 
@@ -323,7 +323,7 @@
 	 * @param {ve.Range} range Range of fragments to render
 	 */
 	mw.LanguageToolDialog.prototype.renderRangeOfFragments = function ( range ) {
-		var i, j, jlen, rects, $result, top;
+		let i, j, jlen, rects, $result, top;
 
 		this.$errors.empty();
 		for ( i = range.start; i < range.end; i++ ) {
@@ -352,7 +352,7 @@
 	 * @param {boolean} scrollIntoView Scroll the marker into view
 	 */
 	mw.LanguageToolDialog.prototype.highlightFocused = function ( scrollIntoView ) {
-		var $result, rect, top,
+		let $result, rect, top,
 			offset, windowScrollTop, windowScrollHeight,
 			surfaceView = this.surface.getView();
 
@@ -417,7 +417,7 @@
 	 * Handle click events on the replace button
 	 */
 	mw.LanguageToolDialog.prototype.onReplaceButtonClick = function () {
-		var end;
+		let end;
 
 		if ( !this.errors.length ) {
 			return;
@@ -450,7 +450,7 @@
 	 * @param {number} index Index to replace
 	 */
 	mw.LanguageToolDialog.prototype.replace = function ( index ) {
-		var replace;
+		let replace;
 
 		replace = this.replaceText.getInput().getValue();
 		this.fragments[ index ].insertContent( replace, true );
@@ -463,7 +463,7 @@
 	 * @return {null} Action was executed
 	 */
 	mw.LanguageToolDialog.prototype.send = function () {
-		var model, data, mapper, i, textArray, text, lang,
+		let model, data, mapper, i, textArray, text, lang,
 			self = this;
 
 		model = ve.init.target.getSurface().getModel();
@@ -498,14 +498,14 @@
 			dataType: 'xml',
 			url: 'http://tools.wmflabs.org/languageproofing/',
 			data: { language: lang, text: text }
-		} ).done( function ( responseXML ) {
+		} ).done( ( responseXML ) => {
 			self.openDialog.apply( self, [ responseXML, mapper ] );
 		} );
 		return null;
 	};
 
 	mw.LanguageToolDialog.prototype.openDialog = function ( responseXML, mapper ) {
-		var languageCode, previousSpanStart, cssName,
+		let languageCode, previousSpanStart, cssName,
 			errorIndex, error, spanStart, spanEnd,
 			range, fragment, ruleId, surfaceModel;
 
@@ -538,7 +538,7 @@
 				ruleId = error.ruleId;
 				this.fragments.push( fragment );
 
-				if ( ruleId.indexOf( 'SPELLER_RULE' ) >= 0 ||
+				if ( ruleId.includes( 'SPELLER_RULE' ) ||
 					ruleId.indexOf( 'MORFOLOGIK_RULE' ) === 0 ||
 					ruleId === 'HUNSPELL_NO_SUGGEST_RULE' ||
 					ruleId === 'HUNSPELL_RULE'
@@ -554,7 +554,7 @@
 	};
 
 	mw.LanguageToolDialog.prototype.processXML = function ( responseXML ) {
-		var errors, i, error, suggestionsStr, url;
+		let errors, i, error, suggestionsStr, url;
 
 		this.errors = [];
 		errors = responseXML.getElementsByTagName( 'error' );
@@ -596,7 +596,7 @@
 	// License: 'This is free and unencumbered software released into the public domain.',
 	// see http://james.padolsey.com/terms-conditions/
 	mw.LanguageToolDialog.prototype.wordwrap = function ( str, width, brk, cut ) {
-		var regex;
+		let regex;
 
 		width = width || 75;
 		brk = brk || '\n';
@@ -613,7 +613,7 @@
 	// End of wrapper code by James Padolsey
 
 	mw.LanguageToolDialog.prototype.displayInformation = function () {
-		var i, index, replacements, error, replaceArr, len, desc;
+		let i, index, replacements, error, replaceArr, len, desc;
 
 		if ( this.errors && this.errors.length > this.focusedIndex ) {
 			desc = this.errors[ this.focusedIndex ].description.split( '<br/>' );
