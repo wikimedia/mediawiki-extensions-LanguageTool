@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"JeffreyKim"
+		]
+	},
+	"languagetool-desc": "用［https://languagetool.org/ LanguageTool］幫助編輯更正拼寫同文法錯誤",
+	"languagetool-toolbar-item-title": "檢查串字同文法"
+}
