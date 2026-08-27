@@ -9,5 +9,10 @@
 		"fix": [
 			"minus-x fix ."
 		]
+	},
+	"config": {
+		"audit": {
+			"block-insecure": false
+		}
 	}
 }
