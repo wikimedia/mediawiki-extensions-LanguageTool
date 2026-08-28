@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Wizzard"
+		]
+	},
+	"languagetool-desc": "Pomáha redaktorom opravovať pravopisné a gramatické chyby pomocou [https://languagetool.org/ LanguageTool]",
+	"languagetool-toolbar-item-title": "Skontrolovať pravopis a gramatiku"
+}
